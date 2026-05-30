@@ -290,6 +290,20 @@
   /* ════════════ SCREEN 3 — MY CLIPS ════════════ */
   #screen-clips { flex: 1; height: calc(100vh - 52px); overflow-y: auto; background: var(--bg); }
   .clips-page { padding: 32px 40px; max-width: 1100px; }
+  /* Clips generation status banner */
+  .clips-status {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 10px 14px; margin-bottom: 20px;
+    transition: opacity .4s ease;
+  }
+  .clips-status-dot {
+    width: 8px; height: 8px; border-radius: 50%; background: var(--accent);
+    flex-shrink: 0; animation: pulse-ring 1.4s ease-in-out infinite;
+  }
+  .clips-status-text { font-size: 12px; font-weight: 600; color: var(--text); flex: 1; }
+  .clips-status-count { font-size: 12px; color: var(--muted); }
+
   .clips-page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
   .clips-page-title { font-size: 22px; font-weight: 900; letter-spacing: -0.5px; }
   .clips-page-meta { font-size: 13px; color: var(--muted); margin-top: 2px; }
@@ -315,39 +329,48 @@
   .clip-btn-edit { background: var(--bg); color: var(--text); border: 1.5px solid var(--border); border-radius: 8px; padding: 8px 12px; font-size: 13px; cursor: pointer; transition: all .15s; }
   .clip-btn-edit:hover { border-color: var(--accent); background: var(--accent-bg); }
 
-  /* Skeleton loading */
-  @keyframes shimmer {
-    0% { background-position: -600px 0; }
-    100% { background-position: 600px 0; }
+  /* Card generation states */
+  @keyframes pulse-ring {
+    0%   { transform: translate(-50%,-50%) scale(.85); opacity: .7; }
+    50%  { transform: translate(-50%,-50%) scale(1.05); opacity: 1; }
+    100% { transform: translate(-50%,-50%) scale(.85); opacity: .7; }
   }
-  .skel {
-    background: linear-gradient(90deg, #e8e3db 25%, #f0ece4 50%, #e8e3db 75%);
-    background-size: 600px 100%;
-    animation: shimmer 1.4s ease-in-out infinite;
-    border-radius: 6px;
+  @keyframes scan-line {
+    0%   { top: 0%; opacity: .6; }
+    100% { top: 100%; opacity: 0; }
   }
-  .clip-card.skeleton .clip-thumb { background: #e0dbd2 !important; }
+  @keyframes revealCard {
+    from { opacity: 0; transform: scale(.97) translateY(6px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  .clip-card { transition: box-shadow .18s, border-color .18s, transform .18s; }
+  .clip-card.skeleton .clip-thumb {
+    background: #111 !important;
+    position: relative; overflow: hidden;
+  }
+  /* scanning line */
+  .clip-card.skeleton .clip-thumb::before {
+    content: ''; position: absolute; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    animation: scan-line 1.8s ease-in-out infinite;
+    z-index: 3;
+  }
+  /* centre pulse ring */
+  .clip-card.skeleton .clip-thumb::after {
+    content: ''; position: absolute; top: 50%; left: 50%;
+    width: 44px; height: 44px; border-radius: 50%;
+    border: 2px solid var(--accent);
+    animation: pulse-ring 1.6s ease-in-out infinite;
+    z-index: 3;
+  }
   .clip-card.skeleton .clip-thumb-person,
   .clip-card.skeleton .clip-thumb-cap,
   .clip-card.skeleton .clip-thumb-duration,
-  .clip-card.skeleton .clip-thumb-score { display: none; }
-  .clip-card.skeleton .clip-thumb::after {
-    content: ''; position: absolute; inset: 0;
-    background: linear-gradient(90deg, #ddd8cf 25%, #e8e3db 50%, #ddd8cf 75%);
-    background-size: 600px 100%;
-    animation: shimmer 1.4s ease-in-out infinite;
-  }
-  .clip-card.skeleton .clip-title { width: 80%; height: 12px; margin-bottom: 8px; }
-  .clip-card.skeleton .clip-meta  { width: 50%; height: 10px; margin-bottom: 14px; }
+  .clip-card.skeleton .clip-thumb-score { opacity: 0; }
+  .clip-card.skeleton .clip-info { opacity: .35; pointer-events: none; }
   .clip-card.skeleton .clip-btn-dl,
   .clip-card.skeleton .clip-btn-edit { opacity: 0; pointer-events: none; }
-  .clip-card { transition: opacity .4s ease, transform .4s ease; }
-  .clip-card.skeleton { opacity: 0.7; }
-  .clip-card.revealed { animation: revealCard .4s ease both; }
-  @keyframes revealCard {
-    from { opacity: 0; transform: translateY(10px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+  .clip-card.revealed { animation: revealCard .5s cubic-bezier(.34,1.26,.64,1) both; }
 
 
   /* ════════════ SCREEN 4 — EDITOR ════════════ */
@@ -1018,6 +1041,11 @@
           <button class="clips-export-all">↓ Export all (.zip)</button>
         </div>
       </div>
+      <div class="clips-status" id="clips-status" style="display:none">
+        <div class="clips-status-dot"></div>
+        <div class="clips-status-text">Generating clips…</div>
+        <div class="clips-status-count" id="clips-status-count">0 / 5 clips ready</div>
+      </div>
       <div class="clips-grid" id="clips-grid"></div>
     </div>
   </div>
@@ -1582,48 +1610,56 @@ const clipData = [
 
 function buildClipsGrid() {
   const g = document.getElementById('clips-grid');
-  if (!g || g.children.length) return; // already loaded or loading — don't restart
+  if (!g || g.children.length) return;
 
-  // Step 1: render all as skeletons
-  clipData.forEach(() => {
+  const statusEl = document.getElementById('clips-status');
+  const totalEl  = document.getElementById('clips-status-count');
+  let revealed = 0;
+
+  function updateStatus() {
+    if (!statusEl) return;
+    if (revealed < clipData.length) {
+      statusEl.style.display = 'flex';
+      totalEl.textContent = revealed + ' / ' + clipData.length + ' clips ready';
+    } else {
+      totalEl.textContent = clipData.length + ' clips ready';
+      setTimeout(() => { statusEl.style.opacity = '0'; setTimeout(() => statusEl.style.display = 'none', 400); }, 1800);
+    }
+  }
+  updateStatus();
+
+  // Render skeletons with the card's actual bg so it feels "in progress"
+  clipData.forEach((c) => {
     const card = document.createElement('div');
     card.className = 'clip-card skeleton';
     card.innerHTML = `
-      <div class="clip-thumb"></div>
+      <div class="clip-thumb" style="background:${c.bg}">
+        <div class="clip-thumb-person">${c.emoji}</div>
+        <div class="clip-thumb-cap"><span style="${c.capStyle}">${c.capText}</span></div>
+        <div class="clip-thumb-duration">${c.duration}</div>
+        <div class="clip-thumb-score">⚡ ${c.score}</div>
+      </div>
       <div class="clip-info">
-        <div class="clip-title skel"></div>
-        <div class="clip-meta skel"></div>
+        <div class="clip-title">${c.title}</div>
+        <div class="clip-meta">${c.duration} · 9:16 · 1080p</div>
         <div class="clip-actions">
           <button class="clip-btn-dl">↓ Download</button>
-          <button class="clip-btn-edit">✂</button>
+          <button class="clip-btn-edit" onclick="event.stopPropagation();goTo(4)" title="Edit in editor">✂</button>
         </div>
       </div>`;
     g.appendChild(card);
   });
 
-  // Step 2: reveal each card with staggered delay
+  // Reveal one by one with 2s stagger
   const cards = Array.from(g.children);
   clipData.forEach((c, i) => {
     setTimeout(() => {
       const card = cards[i];
       card.classList.remove('skeleton');
       card.classList.add('revealed');
-      card.innerHTML = `
-        <div class="clip-thumb" style="background:${c.bg}">
-          <div class="clip-thumb-person">${c.emoji}</div>
-          <div class="clip-thumb-cap"><span style="${c.capStyle}">${c.capText}</span></div>
-          <div class="clip-thumb-duration">${c.duration}</div>
-          <div class="clip-thumb-score">⚡ ${c.score}</div>
-        </div>
-        <div class="clip-info">
-          <div class="clip-title">${c.title}</div>
-          <div class="clip-meta">${c.duration} · 9:16 · 1080p</div>
-          <div class="clip-actions">
-            <button class="clip-btn-dl">↓ Download</button>
-            <button class="clip-btn-edit" onclick="event.stopPropagation();goTo(4)" title="Edit in editor">✂</button>
-          </div>
-        </div>`;
-    }, 600 + i * 500);
+      revealed++;
+      updateStatus();
+    }, 1200 + i * 2000);
   });
 }
 
