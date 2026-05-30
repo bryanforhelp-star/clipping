@@ -1659,7 +1659,9 @@ function buildClipsGrid() {
       card.classList.add('revealed');
       revealed++;
       updateStatus();
-    }, 1200 + i * 4500);
+    // realistic: first clip fast, rest vary between 5-12s apart
+    const delays = [1800, 7200, 13500, 19000, 26000];
+    }, delays[i]);
   });
 }
 
