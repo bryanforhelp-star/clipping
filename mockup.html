@@ -290,21 +290,73 @@
   .ph-time { font-size: 9px; color: rgba(255,255,255,.5); }
 
   /* video options bar */
+  .vob-wrap { position: relative; flex-shrink: 0; }
   .video-options-bar {
     display: flex; align-items: center;
     background: var(--surface); border: 1px solid var(--border);
     border-radius: 10px; padding: 0 4px; flex-shrink: 0;
+    position: relative;
   }
   .vob-item {
     display: flex; align-items: center; gap: 6px;
     padding: 9px 12px; font-size: 12px; font-weight: 600;
-    cursor: pointer; transition: color .12s; color: var(--text);
-    white-space: nowrap;
+    cursor: pointer; transition: all .12s; color: var(--text);
+    white-space: nowrap; border-radius: 7px; user-select: none;
   }
-  .vob-item:hover { color: var(--accent); }
-  .vob-icon { font-size: 15px; color: var(--text); }
+  .vob-item:hover { background: var(--bg); }
+  .vob-item.open { background: var(--accent-bg); color: var(--accent); }
+  .vob-icon { font-size: 14px; }
   .vob-swatch { width: 14px; height: 14px; border-radius: 3px; background: #111; display: inline-block; flex-shrink: 0; }
   .vob-sep { width: 1px; height: 18px; background: var(--border); flex-shrink: 0; }
+
+  /* dropdowns */
+  .vob-dropdown {
+    display: none; position: absolute; top: calc(100% + 8px); left: 50%;
+    transform: translateX(-50%);
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,.10);
+    z-index: 500; min-width: 240px; padding: 14px;
+    animation: dropIn .15s ease;
+  }
+  .vob-dropdown.open { display: block; }
+  @keyframes dropIn { from { opacity:0; transform:translateX(-50%) translateY(-4px); } to { opacity:1; transform:translateX(-50%) translateY(0); } }
+  .vob-dd-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 10px; }
+  .vob-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+  .vob-pill {
+    padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;
+    border: 1.5px solid var(--border); background: var(--bg); cursor: pointer;
+    transition: all .12s; font-family: inherit; color: var(--text);
+  }
+  .vob-pill:hover { border-color: var(--accent); }
+  .vob-pill.sel { background: var(--accent-bg); border-color: var(--accent); color: var(--text); }
+
+  /* blur slider row */
+  .vob-slider-row { display: flex; align-items: center; gap: 10px; }
+  .vob-slider-label { font-size: 11px; font-weight: 600; color: var(--muted); width: 28px; flex-shrink: 0; }
+  .vob-slider {
+    flex: 1; -webkit-appearance: none; appearance: none;
+    height: 3px; border-radius: 2px; background: var(--border); outline: none; cursor: pointer;
+  }
+  .vob-slider::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%;
+    background: var(--accent); cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,.15);
+  }
+  .vob-slider-val { font-size: 11px; font-weight: 700; color: var(--text); width: 26px; text-align: right; flex-shrink: 0; }
+
+  /* layout grid */
+  .vob-layout-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .vob-layout-card {
+    border: 1.5px solid var(--border); border-radius: 9px; padding: 10px 8px 8px;
+    cursor: pointer; transition: all .12s; text-align: center; background: var(--bg);
+  }
+  .vob-layout-card:hover { border-color: var(--accent); }
+  .vob-layout-card.sel { border-color: var(--accent); background: var(--accent-bg); }
+  .vob-layout-icon {
+    width: 100%; aspect-ratio: 9/16; border-radius: 5px; margin-bottom: 5px;
+    display: flex; align-items: center; justify-content: center; font-size: 18px;
+    background: #e0ddd8; overflow: hidden; max-height: 52px;
+  }
+  .vob-layout-name { font-size: 11px; font-weight: 600; color: var(--text); }
 
   /* clip strip — BIGGER thumbnails */
   .clip-strip { width: 100%; max-width: 600px; }
@@ -742,14 +794,92 @@
         </div>
 
         <!-- Video options bar -->
-        <div class="video-options-bar">
-          <div class="vob-item"><span class="vob-icon">▭</span> Ratio (9:16)</div>
+        <div class="video-options-bar" id="vob">
+
+          <!-- Ratio -->
+          <div class="vob-item" onclick="vobToggle(event,'dd-ratio')">
+            <span class="vob-icon">▭</span> Ratio (9:16)
+          </div>
           <div class="vob-sep"></div>
-          <div class="vob-item"><span class="vob-swatch"></span> Background</div>
+
+          <!-- Background -->
+          <div class="vob-item" id="vob-bg-btn" onclick="vobToggle(event,'dd-bg')">
+            <span class="vob-swatch" id="vob-bg-swatch"></span> Background
+          </div>
           <div class="vob-sep"></div>
-          <div class="vob-item"><span class="vob-icon">⊡</span> Layouts</div>
+
+          <!-- Layouts -->
+          <div class="vob-item" onclick="vobToggle(event,'dd-layouts')">
+            <span class="vob-icon">⊡</span> Layouts
+          </div>
           <div class="vob-sep"></div>
+
           <div class="vob-item"><span class="vob-icon">⊙</span></div>
+        </div>
+
+        <!-- Ratio dropdown -->
+        <div class="vob-dropdown" id="dd-ratio" style="min-width:200px;">
+          <div class="vob-dd-label">Aspect ratio</div>
+          <div class="vob-pills">
+            <button class="vob-pill sel" onclick="selVobPill(this,'dd-ratio')">9:16</button>
+            <button class="vob-pill" onclick="selVobPill(this,'dd-ratio')">16:9</button>
+            <button class="vob-pill" onclick="selVobPill(this,'dd-ratio')">1:1</button>
+            <button class="vob-pill" onclick="selVobPill(this,'dd-ratio')">4:5</button>
+          </div>
+        </div>
+
+        <!-- Background dropdown -->
+        <div class="vob-dropdown" id="dd-bg">
+          <div class="vob-dd-label">Background type</div>
+          <div class="vob-pills" id="bg-type-pills">
+            <button class="vob-pill sel" onclick="selBgType(this,'Blur')">Blur</button>
+            <button class="vob-pill" onclick="selBgType(this,'Fill')">Fill</button>
+            <button class="vob-pill" onclick="selBgType(this,'Black')">Black</button>
+            <button class="vob-pill" onclick="selBgType(this,'White')">White</button>
+            <button class="vob-pill" onclick="selBgType(this,'Split')">Split</button>
+            <button class="vob-pill" onclick="selBgType(this,'Stacked')">Stacked</button>
+          </div>
+          <!-- Blur intensity (shown only for blur types) -->
+          <div id="blur-controls">
+            <div class="vob-dd-label">Blur intensity</div>
+            <div class="vob-slider-row">
+              <span class="vob-slider-label">0</span>
+              <input class="vob-slider" type="range" min="0" max="100" value="65"
+                oninput="document.getElementById('blur-val').textContent=this.value" />
+              <span class="vob-slider-val" id="blur-val">65</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Layouts dropdown -->
+        <div class="vob-dropdown" id="dd-layouts" style="min-width:260px;">
+          <div class="vob-dd-label">Layout</div>
+          <div class="vob-layout-grid">
+            <div class="vob-layout-card sel" onclick="selVobLayout(this)">
+              <div class="vob-layout-icon" style="background:#1a1a2e;">👩</div>
+              <div class="vob-layout-name">Full frame</div>
+            </div>
+            <div class="vob-layout-card" onclick="selVobLayout(this)">
+              <div class="vob-layout-icon" style="background:linear-gradient(180deg,#1a1a2e 50%,#111 50%);">
+                <span style="font-size:12px;">👩<br>📊</span>
+              </div>
+              <div class="vob-layout-name">Split screen</div>
+            </div>
+            <div class="vob-layout-card" onclick="selVobLayout(this)">
+              <div class="vob-layout-icon" style="background:#16213e;position:relative;">
+                <span style="font-size:16px;">👩</span>
+                <span style="position:absolute;bottom:3px;right:4px;font-size:10px;background:rgba(0,0,0,.5);border-radius:3px;padding:1px 2px;">🖼</span>
+              </div>
+              <div class="vob-layout-name">Picture-in-pic</div>
+            </div>
+            <div class="vob-layout-card" onclick="selVobLayout(this)">
+              <div class="vob-layout-icon" style="background:#f0f0f0;display:flex;flex-direction:column;align-items:stretch;padding:2px;gap:2px;max-height:52px;">
+                <div style="flex:1;background:#1a1a2e;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:10px;">👩</div>
+                <div style="flex:1;background:#222;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:10px;">👨</div>
+              </div>
+              <div class="vob-layout-name">Stacked</div>
+            </div>
+          </div>
         </div>
 
       </div>
@@ -1094,6 +1224,42 @@ document.querySelectorAll('.clip-th').forEach(b=>b.addEventListener('click',()=>
   document.getElementById('tl-tracks').style.overflowX = 'auto';
   document.getElementById('tl-tracks').style.overflowY = 'hidden';
 })();
+
+// ── Video options bar dropdowns ──
+function vobToggle(e, id) {
+  e.stopPropagation();
+  const dd = document.getElementById(id);
+  const btn = e.currentTarget;
+  const allDDs = document.querySelectorAll('.vob-dropdown');
+  const allBtns = document.querySelectorAll('.vob-item');
+  const isOpen = dd.classList.contains('open');
+  allDDs.forEach(d => d.classList.remove('open'));
+  allBtns.forEach(b => b.classList.remove('open'));
+  if (!isOpen) { dd.classList.add('open'); btn.classList.add('open'); }
+}
+document.addEventListener('click', () => {
+  document.querySelectorAll('.vob-dropdown').forEach(d => d.classList.remove('open'));
+  document.querySelectorAll('.vob-item').forEach(b => b.classList.remove('open'));
+});
+document.querySelectorAll('.vob-dropdown').forEach(d => d.addEventListener('click', e => e.stopPropagation()));
+
+function selVobPill(el, ddId) {
+  el.closest('.vob-pills').querySelectorAll('.vob-pill').forEach(p => p.classList.remove('sel'));
+  el.classList.add('sel');
+}
+function selVobLayout(el) {
+  el.closest('.vob-layout-grid').querySelectorAll('.vob-layout-card').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+}
+const bgSwatchColors = { Blur:'linear-gradient(135deg,#2D3748,#1a202c)', Fill:'#667eea', Black:'#000', White:'#fff', Split:'linear-gradient(180deg,#fff 50%,#000 50%)', Stacked:'linear-gradient(180deg,#1a1a2e 50%,#0f3460 50%)' };
+function selBgType(el, type) {
+  el.closest('.vob-pills').querySelectorAll('.vob-pill').forEach(p => p.classList.remove('sel'));
+  el.classList.add('sel');
+  const swatch = document.getElementById('vob-bg-swatch');
+  swatch.style.background = bgSwatchColors[type] || '#111';
+  const blurCtrl = document.getElementById('blur-controls');
+  blurCtrl.style.display = (type === 'Blur') ? 'block' : 'none';
+}
 
 // ── Settings helpers ──
 function selFmt(el) { el.classList.toggle('sel'); }
