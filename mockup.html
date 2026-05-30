@@ -361,6 +361,11 @@
     content: ''; display: none; /* bars injected via JS */
   }
 
+  .clip-thumb-pct {
+    position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
+    font-size: 11px; font-weight: 800; color: rgba(255,255,255,.7);
+    letter-spacing: 1px; z-index: 3; font-family: 'Inter', sans-serif;
+  }
   .eq-bars {
     position: absolute; bottom: 30%; left: 50%; transform: translateX(-50%);
     display: flex; align-items: flex-end; gap: 5px; height: 36px; z-index: 3;
@@ -1656,6 +1661,7 @@ function buildClipsGrid() {
           <div class="eq-bar" style="height:85%"></div>
           <div class="eq-bar" style="height:50%"></div>
         </div>
+        <div class="clip-thumb-pct" data-pct="0">0%</div>
       </div>
       <div class="clip-info">
         <div class="clip-title">${c.title}</div>
@@ -1668,20 +1674,35 @@ function buildClipsGrid() {
     g.appendChild(card);
   });
 
-  // Reveal one by one with 2s stagger
+  // Each card counts up its own % at a slightly different pace, then reveals
   const cards = Array.from(g.children);
+  const durations = [3200, 5000, 4200, 6500, 5800]; // ms each card takes to hit 100%
   clipData.forEach((c, i) => {
-    setTimeout(() => {
-      const card = cards[i];
-      card.classList.remove('skeleton');
-      card.classList.add('revealed');
-      const eq = card.querySelector('.eq-bars');
-      if (eq) eq.remove();
-      revealed++;
-      updateStatus();
-    // realistic: first clip fast, rest vary between 5-12s apart
-    const delays = [1800, 7200, 13500, 19000, 26000];
-    }, delays[i]);
+    const card = cards[i];
+    const pctEl = card.querySelector('.clip-thumb-pct');
+    const dur = durations[i];
+    const interval = 80;
+    const steps = dur / interval;
+    let step = 0;
+    const ticker = setInterval(() => {
+      step++;
+      // ease-out curve so it slows near 100
+      const raw = step / steps;
+      const pct = Math.min(99, Math.round(100 * (1 - Math.pow(1 - raw, 2.2))));
+      if (pctEl) pctEl.textContent = pct + '%';
+      if (step >= steps) {
+        clearInterval(ticker);
+        if (pctEl) pctEl.textContent = '100%';
+        setTimeout(() => {
+          card.classList.remove('skeleton');
+          card.classList.add('revealed');
+          const eq = card.querySelector('.eq-bars');
+          if (eq) eq.remove();
+          revealed++;
+          updateStatus();
+        }, 120);
+      }
+    }, interval);
   });
 }
 
