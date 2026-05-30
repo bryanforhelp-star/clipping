@@ -445,6 +445,22 @@
   .vob-pill:hover { border-color: var(--accent); }
   .vob-pill.sel { background: var(--accent-bg); border-color: var(--accent); color: var(--text); }
 
+  /* ── caption preview animations ── */
+  @keyframes capFadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes capPop    { 0%{transform:scale(.7);opacity:0} 60%{transform:scale(1.08)} 100%{transform:scale(1);opacity:1} }
+  @keyframes capSlide  { from { opacity:0; transform:translateX(-18px); } to { opacity:1; transform:translateX(0); } }
+  @keyframes capGlow   { 0%,100%{text-shadow:0 0 6px #0FF,0 0 12px #0FF} 50%{text-shadow:0 0 18px #0FF,0 0 32px #0FF} }
+  @keyframes capBounce { 0%{transform:translateY(-6px);opacity:0} 60%{transform:translateY(3px)} 100%{transform:translateY(0);opacity:1} }
+  @keyframes capFlip   { from{opacity:0;transform:rotateX(-60deg)} to{opacity:1;transform:rotateX(0)} }
+  @keyframes capWipe   { from{clip-path:inset(0 100% 0 0)} to{clip-path:inset(0 0% 0 0)} }
+  .cap-anim-fadeup  .phone-cap { animation: capFadeUp .4s ease both; }
+  .cap-anim-pop     .phone-cap { animation: capPop .5s cubic-bezier(.34,1.56,.64,1) both; }
+  .cap-anim-slide   .phone-cap { animation: capSlide .35s ease both; }
+  .cap-anim-glow    .phone-cap { animation: capGlow 1.8s ease-in-out infinite; }
+  .cap-anim-bounce  .phone-cap { animation: capBounce .45s ease both; }
+  .cap-anim-flip    .phone-cap { animation: capFlip .4s ease both; perspective: 400px; }
+  .cap-anim-wipe    .phone-cap { animation: capWipe .5s ease both; }
+
   /* blur slider row */
   .vob-slider-row { display: flex; align-items: center; gap: 10px; }
   .vob-slider-label { font-size: 11px; font-weight: 600; color: var(--muted); width: 28px; flex-shrink: 0; }
@@ -1038,11 +1054,11 @@
 
       <!-- CENTER -->
       <div class="ed-center">
-        <div class="phone-frame">
-          <div class="phone-inner">
+        <div class="phone-frame" id="phone-frame">
+          <div class="phone-inner" id="phone-inner">
             <div class="phone-person">👩</div>
-            <div class="phone-cap-area">
-              <span class="phone-cap">AI IS NOT<br>MAKING YOU DUMBER</span>
+            <div class="phone-cap-area" id="phone-cap-area">
+              <span class="phone-cap" id="phone-cap">AI IS NOT<br>MAKING YOU DUMBER</span>
             </div>
             <div class="phone-prog">
               <button class="ph-play">▶</button>
@@ -1386,30 +1402,71 @@ templates.forEach((t, i) => {
 
 // ── Mini grids ──
 const animatedItems = [
-  { bg:'#111',    style:'background:#FACC15;color:#000',        text:'HERE IS\nYOUR' },
-  { bg:'#1a1a2e', style:'color:#fff;text-transform:uppercase;font-weight:900', text:'HERE IS\nSUBTITLE' },
-  { bg:'#0a0a0a', style:'color:#0FF;text-shadow:0 0 6px #0FF', text:'FIVE\nBOXING' },
-  { bg:'#4c1d95', style:'color:#F97316',                        text:'Five boxing\nwizard' },
+  {
+    bg:'#111', cardStyle:'background:#FACC15;color:#000', text:'HERE IS\nYOUR',
+    preview:{ phoneBg:'linear-gradient(180deg,#1a1a2e 0%,#0f0f0f 100%)', capStyle:'background:#FACC15;color:#000;font-weight:900;text-transform:uppercase;font-size:13px;padding:4px 10px;border-radius:3px;', anim:'cap-anim-pop' }
+  },
+  {
+    bg:'#1a1a2e', cardStyle:'color:#fff;text-transform:uppercase;font-weight:900', text:'HERE IS\nSUBTITLE',
+    preview:{ phoneBg:'linear-gradient(180deg,#1a1a2e 0%,#16213e 100%)', capStyle:'background:transparent;color:#fff;font-weight:900;text-transform:uppercase;font-size:13px;padding:4px 0;letter-spacing:1px;', anim:'cap-anim-fadeup' }
+  },
+  {
+    bg:'#0a0a0a', cardStyle:'color:#0FF;text-shadow:0 0 6px #0FF', text:'FIVE\nBOXING',
+    preview:{ phoneBg:'linear-gradient(180deg,#020812 0%,#050d1a 100%)', capStyle:'background:transparent;color:#0FF;font-weight:900;text-transform:uppercase;font-size:13px;padding:4px 0;', anim:'cap-anim-glow' }
+  },
+  {
+    bg:'#4c1d95', cardStyle:'color:#F97316', text:'Five boxing\nwizard',
+    preview:{ phoneBg:'linear-gradient(180deg,#2e1065 0%,#4c1d95 100%)', capStyle:'background:transparent;color:#F97316;font-weight:700;font-size:13px;padding:4px 0;', anim:'cap-anim-slide' }
+  },
 ];
 const simpleItems = [
-  { bg:'#111',    style:'color:#fff;font-weight:900',  text:'FIVE BOXING\nWIZARDS' },
-  { bg:'#000',    style:'color:#ccc;font-weight:400',  text:'Five boxing\nwizards jump' },
-  { bg:'#1a1714', style:'color:#FACC15;font-weight:700', text:'FIVE BOXING\nWIZARDS JUMP' },
-  { bg:'#0f1117', style:'color:#fff;font-weight:600',  text:'Five boxing\nwizard jump' },
+  {
+    bg:'#111', cardStyle:'color:#fff;font-weight:900', text:'FIVE BOXING\nWIZARDS',
+    preview:{ phoneBg:'linear-gradient(180deg,#1a1a1a 0%,#111 100%)', capStyle:'background:transparent;color:#fff;font-weight:900;text-transform:uppercase;font-size:13px;padding:4px 0;', anim:'cap-anim-bounce' }
+  },
+  {
+    bg:'#000', cardStyle:'color:#ccc;font-weight:400', text:'Five boxing\nwizards jump',
+    preview:{ phoneBg:'linear-gradient(180deg,#111 0%,#000 100%)', capStyle:'background:transparent;color:#ccc;font-weight:400;font-size:13px;padding:4px 0;', anim:'cap-anim-fadeup' }
+  },
+  {
+    bg:'#1a1714', cardStyle:'color:#FACC15;font-weight:700', text:'FIVE BOXING\nWIZARDS JUMP',
+    preview:{ phoneBg:'linear-gradient(180deg,#1a1714 0%,#0f0e0b 100%)', capStyle:'background:transparent;color:#FACC15;font-weight:700;text-transform:uppercase;font-size:13px;padding:4px 0;', anim:'cap-anim-wipe' }
+  },
+  {
+    bg:'#0f1117', cardStyle:'color:#fff;font-weight:600', text:'Five boxing\nwizard jump',
+    preview:{ phoneBg:'linear-gradient(180deg,#0f1117 0%,#080a0f 100%)', capStyle:'background:rgba(255,255,255,.12);color:#fff;font-weight:600;font-size:13px;padding:4px 10px;border-radius:4px;', anim:'cap-anim-flip' }
+  },
 ];
+
+function applyPreset(p) {
+  const inner = document.getElementById('phone-inner');
+  const cap = document.getElementById('phone-cap');
+  // strip old anim class
+  ['cap-anim-pop','cap-anim-fadeup','cap-anim-glow','cap-anim-slide','cap-anim-bounce','cap-anim-wipe','cap-anim-flip'].forEach(c=>inner.classList.remove(c));
+  inner.style.background = p.phoneBg;
+  cap.setAttribute('style', p.capStyle);
+  void inner.offsetWidth; // force reflow to restart animation
+  inner.classList.add(p.anim);
+}
+
 function buildMini(id, items) {
   const c = document.getElementById(id);
   items.forEach((t,i) => {
     const card = document.createElement('div');
-    card.className = 'mini-card'+(i===0?' sel':'');
+    card.className = 'mini-card'+(i===0&&id==='mini-animated'?' sel':'');
     card.style.background = t.bg;
-    card.innerHTML = `<div class="mini-cap" style="${t.style}">${t.text.replace('\n','<br>')}</div>`;
-    card.onclick = () => { document.querySelectorAll('.mini-card').forEach(x=>x.classList.remove('sel')); card.classList.add('sel'); };
+    card.innerHTML = `<div class="mini-cap" style="${t.cardStyle}">${t.text.replace('\n','<br>')}</div>`;
+    card.onclick = () => {
+      document.querySelectorAll('.mini-card').forEach(x=>x.classList.remove('sel'));
+      card.classList.add('sel');
+      applyPreset(t.preview);
+    };
     c.appendChild(card);
   });
 }
 buildMini('mini-animated', animatedItems);
 buildMini('mini-simple', simpleItems);
+applyPreset(animatedItems[0].preview);
 
 // ── UI helpers ──
 function swSourceTab(el) { el.closest('.source-tabs').querySelectorAll('.source-tab').forEach(t=>t.classList.remove('active')); el.classList.add('active'); }
