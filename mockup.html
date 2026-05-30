@@ -4,860 +4,589 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Joltra — Redesign Mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --bg: #F5F2ED;
+    --bg: #F2EFE9;
     --surface: #FFFFFF;
-    --border: #E5E0D8;
-    --text: #1A1714;
-    --muted: #8A847C;
-    --accent: #D4A843;
-    --accent-light: #F5E9CC;
-    --accent-hover: #C49A38;
-    --radius: 14px;
-    --shadow: 0 2px 12px rgba(0,0,0,0.06);
+    --border: #E3DDD4;
+    --text: #1C1812;
+    --muted: #9B9389;
+    --accent: #C8A84B;
+    --accent-bg: #F0E8D0;
+    --accent-hover: #B5973E;
+    --sidebar-bg: #1C1812;
+    --sidebar-muted: rgba(255,255,255,0.45);
+    --sidebar-active-bg: rgba(255,255,255,0.1);
   }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg); color: var(--text);
+    min-height: 100vh; display: flex;
   }
 
-  /* ── NAV ── */
-  nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 32px;
-    height: 60px;
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    position: sticky;
-    top: 0;
-    z-index: 100;
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: 180px; flex-shrink: 0;
+    background: var(--sidebar-bg);
+    display: flex; flex-direction: column;
+    padding: 20px 0; position: fixed;
+    top: 0; left: 0; bottom: 0; z-index: 200;
   }
-  .nav-logo {
+  .sidebar-logo {
+    display: flex; align-items: center; gap: 9px;
+    padding: 0 18px 24px;
+    font-weight: 800; font-size: 17px; color: #fff; letter-spacing: -0.4px;
+  }
+  .logo-sq {
+    width: 28px; height: 28px; border-radius: 7px;
+    background: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 900; color: #fff;
+  }
+  .nav-group-label {
+    font-size: 10px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 1.2px; color: var(--sidebar-muted); padding: 16px 18px 6px;
+  }
+  .nav-item {
     display: flex; align-items: center; gap: 10px;
-    font-weight: 700; font-size: 18px; letter-spacing: -0.5px;
+    padding: 9px 18px; font-size: 13px; font-weight: 500;
+    color: var(--sidebar-muted); cursor: pointer; transition: all .15s; text-decoration: none;
   }
-  .logo-mark {
-    width: 32px; height: 32px; background: var(--text); border-radius: 8px;
+  .nav-item:hover, .nav-item.active { color: #fff; background: var(--sidebar-active-bg); }
+  .nav-icon { font-size: 14px; width: 18px; text-align: center; }
+  .sidebar-bottom {
+    padding: 16px 18px; border-top: 1px solid rgba(255,255,255,0.08); margin-top: 8px;
+  }
+  .user-row { display: flex; align-items: center; gap: 9px; cursor: pointer; }
+  .user-avatar {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: linear-gradient(135deg,#667eea,#764ba2);
     display: flex; align-items: center; justify-content: center;
-    color: var(--accent); font-size: 16px; font-weight: 900;
+    font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0;
   }
-  .nav-steps {
-    display: flex; align-items: center; gap: 0;
+  .user-name { font-size: 12px; font-weight: 600; color: #fff; }
+  .user-plan { font-size: 10px; color: var(--sidebar-muted); }
+  .min-bar { margin-top: 12px; background: rgba(255,255,255,0.1); border-radius: 3px; height: 4px; }
+  .min-fill { height: 100%; width: 0%; background: var(--accent); border-radius: 3px; }
+  .min-label { font-size: 10px; color: var(--sidebar-muted); margin-top: 4px; }
+
+  /* ── MAIN ── */
+  .main { margin-left: 180px; flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+
+  /* ── TOPBAR ── */
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 32px; height: 52px; background: var(--bg);
+    border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100;
   }
-  .step-item {
-    display: flex; align-items: center; gap: 8px;
-    padding: 6px 16px;
-    font-size: 13px; font-weight: 500; color: var(--muted);
-    cursor: pointer; transition: color .2s;
-    position: relative;
+  .topbar-title { font-size: 15px; font-weight: 700; }
+  .step-nav { display: flex; align-items: center; gap: 6px; }
+  .step-pill {
+    display: flex; align-items: center; gap: 6px;
+    padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;
+    color: var(--muted); cursor: pointer; transition: all .2s; border: 1.5px solid transparent;
   }
-  .step-item.active { color: var(--text); }
-  .step-item.done { color: var(--muted); cursor: default; }
-  .step-num {
-    width: 22px; height: 22px; border-radius: 50%;
-    background: var(--border); color: var(--muted);
-    font-size: 11px; font-weight: 700;
-    display: flex; align-items: center; justify-content: center;
-    transition: all .2s;
+  .step-pill.active { background: var(--surface); color: var(--text); border-color: var(--border); box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+  .step-pill.done { color: #22C55E; }
+  .step-dot {
+    width: 18px; height: 18px; border-radius: 50%; background: #ECEAE5;
+    font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; color: var(--muted);
   }
-  .step-item.active .step-num {
-    background: var(--text); color: #fff;
-  }
-  .step-item.done .step-num {
-    background: #22C55E; color: #fff;
-  }
-  .step-connector {
-    width: 32px; height: 1px; background: var(--border);
-  }
-  .nav-right { display: flex; align-items: center; gap: 12px; }
-  .credits-badge {
-    font-size: 12px; color: var(--muted);
-    background: var(--bg); padding: 5px 12px; border-radius: 20px;
-    border: 1px solid var(--border);
-  }
-  .btn-upgrade {
-    background: var(--accent); color: #fff;
-    border: none; border-radius: 8px;
-    padding: 7px 16px; font-size: 13px; font-weight: 600;
-    cursor: pointer; transition: background .2s;
-  }
-  .btn-upgrade:hover { background: var(--accent-hover); }
+  .step-pill.active .step-dot { background: var(--text); color: #fff; }
+  .step-pill.done .step-dot { background: #22C55E; color: #fff; }
+  .step-sep { color: var(--border); font-size: 16px; }
+  .topbar-right { display: flex; align-items: center; gap: 10px; }
+  .topbar-btn { width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer; color: var(--muted); }
+  .btn-upgrade { background: var(--accent); color: #fff; border: none; border-radius: 8px; padding: 7px 14px; font-size: 12px; font-weight: 700; cursor: pointer; }
 
   /* ── SCREENS ── */
-  .screen { display: none !important; animation: fadeUp .3s ease; }
+  .screen { display: none !important; }
   .screen.active { display: block !important; }
-  #screen-editor.active { display: flex !important; }
+  #screen-editor.active { display: flex !important; flex-direction: column; }
   #screen-upload.active { display: flex !important; }
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(12px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
 
-  /* ════════════════════════════════════════
-     SCREEN 1 — UPLOAD
-  ════════════════════════════════════════ */
+  /* ════════════ SCREEN 1 — UPLOAD ════════════ */
   #screen-upload {
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    min-height: calc(100vh - 60px);
-    padding: 40px 20px;
+    flex: 1; flex-direction: column; align-items: center; justify-content: center;
+    padding: 48px 24px; min-height: calc(100vh - 52px);
   }
-  .upload-card {
-    background: var(--surface);
-    border-radius: 24px;
-    width: 100%; max-width: 620px;
-    padding: 48px 48px 40px;
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border);
-  }
-  .upload-headline {
-    font-size: 28px; font-weight: 800; letter-spacing: -0.8px;
-    text-align: center; margin-bottom: 6px;
-  }
-  .upload-sub {
-    text-align: center; color: var(--muted); font-size: 14px;
-    margin-bottom: 32px;
-  }
-
-  /* URL input */
-  .url-row {
-    display: flex; gap: 10px; margin-bottom: 24px;
-  }
-  .url-input-wrap {
-    flex: 1; display: flex; align-items: center; gap: 10px;
-    background: var(--bg); border: 1.5px solid var(--border);
-    border-radius: 12px; padding: 0 16px;
-    transition: border-color .2s;
-  }
-  .url-input-wrap:focus-within { border-color: var(--accent); }
-  .url-input-wrap svg { color: var(--muted); flex-shrink: 0; }
-  .url-input {
-    flex: 1; border: none; background: transparent;
-    font-size: 14px; padding: 14px 0; outline: none; color: var(--text);
-  }
+  .upload-eyebrow { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.2px; color: var(--muted); margin-bottom: 10px; text-align: center; }
+  .upload-headline { font-size: 36px; font-weight: 900; letter-spacing: -1.2px; text-align: center; margin-bottom: 8px; }
+  .upload-sub { text-align: center; color: var(--muted); font-size: 14px; margin-bottom: 40px; }
+  .upload-card { background: var(--surface); border-radius: 20px; width: 100%; max-width: 560px; padding: 32px; border: 1px solid var(--border); box-shadow: 0 2px 16px rgba(0,0,0,.05); }
+  .source-tabs { display: flex; gap: 6px; margin-bottom: 20px; }
+  .source-tab { padding: 7px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; border: 1.5px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; transition: all .15s; font-family: inherit; }
+  .source-tab.active { background: #F0E8D0; border-color: var(--accent); color: var(--text); }
+  .url-row { display: flex; gap: 8px; margin-bottom: 20px; }
+  .url-wrap { flex: 1; display: flex; align-items: center; gap: 10px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px; padding: 0 14px; transition: border-color .2s; }
+  .url-wrap:focus-within { border-color: var(--accent); }
+  .url-label { font-size: 10px; font-weight: 700; color: var(--muted); letter-spacing: 0.5px; flex-shrink: 0; }
+  .url-input { flex: 1; border: none; background: transparent; font-size: 13px; padding: 13px 0; outline: none; color: var(--text); font-family: inherit; }
   .url-input::placeholder { color: var(--muted); }
-  .btn-continue {
-    background: var(--text); color: #fff;
-    border: none; border-radius: 12px;
-    padding: 0 24px; font-size: 14px; font-weight: 600;
-    cursor: pointer; white-space: nowrap; transition: opacity .2s;
-    height: 50px;
-  }
-  .btn-continue:hover { opacity: .85; }
-
-  /* Divider */
-  .divider {
-    display: flex; align-items: center; gap: 12px;
-    color: var(--muted); font-size: 12px; margin-bottom: 24px;
-  }
-  .divider::before, .divider::after {
-    content: ''; flex: 1; height: 1px; background: var(--border);
-  }
-
-  /* Drop zone */
-  .drop-zone {
-    border: 2px dashed var(--border); border-radius: 16px;
-    padding: 48px 24px; text-align: center;
-    cursor: pointer; transition: all .2s; margin-bottom: 24px;
-  }
-  .drop-zone:hover { border-color: var(--accent); background: var(--accent-light); }
-  .drop-icon {
-    font-size: 40px; margin-bottom: 12px;
-  }
-  .drop-title { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
-  .drop-sub { font-size: 13px; color: var(--muted); }
-  .drop-sub a { color: var(--accent); text-decoration: none; font-weight: 500; }
-
-  /* Import options */
-  .import-options { display: flex; gap: 10px; }
-  .import-btn {
-    flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
-    padding: 12px; border-radius: 10px;
-    border: 1.5px solid var(--border); background: transparent;
-    font-size: 13px; font-weight: 500; color: var(--text);
-    cursor: pointer; transition: all .2s;
-  }
+  .btn-continue { background: var(--text); color: #fff; border: none; border-radius: 10px; padding: 0 22px; font-size: 13px; font-weight: 700; cursor: pointer; height: 48px; white-space: nowrap; font-family: inherit; transition: opacity .15s; }
+  .btn-continue:hover { opacity: .82; }
+  .or-divider { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 12px; margin-bottom: 20px; }
+  .or-divider::before, .or-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .drop-zone { border: 2px dashed var(--border); border-radius: 14px; padding: 40px 20px; text-align: center; cursor: pointer; transition: all .2s; margin-bottom: 16px; }
+  .drop-zone:hover { border-color: var(--accent); background: var(--accent-bg); }
+  .drop-icon { font-size: 36px; margin-bottom: 10px; }
+  .drop-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .drop-sub { font-size: 12px; color: var(--muted); }
+  .drop-sub span { color: var(--accent); font-weight: 600; }
+  .import-row { display: flex; gap: 8px; }
+  .import-btn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 11px; border-radius: 10px; border: 1.5px solid var(--border); background: transparent; font-size: 12px; font-weight: 600; color: var(--text); cursor: pointer; transition: all .15s; font-family: inherit; }
   .import-btn:hover { border-color: var(--text); background: var(--bg); }
-  .import-icon {
-    width: 20px; height: 20px; border-radius: 4px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12px; font-weight: 700;
+  .import-ic { width: 18px; height: 18px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 900; color: #fff; }
+
+  /* ════════════ SCREEN 2 — STYLE ════════════ */
+  #screen-style { padding: 36px 40px; max-width: 1060px; }
+
+  .style2-header {
+    display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 28px;
   }
-  .zoom-icon { background: #2D8CFF; color: #fff; }
-  .record-icon { background: #22C55E; color: #fff; }
+  .page-headline { font-size: 26px; font-weight: 900; letter-spacing: -0.8px; margin-bottom: 4px; }
+  .page-sub { font-size: 13px; color: var(--muted); }
 
-  /* ════════════════════════════════════════
-     SCREEN 2 — STYLE PICKER
-  ════════════════════════════════════════ */
-  #screen-style { padding: 40px 48px; max-width: 1100px; margin: 0 auto; }
-
-  .style-header {
-    display: flex; align-items: flex-end; justify-content: space-between;
-    margin-bottom: 32px;
-  }
-  .style-headline { font-size: 26px; font-weight: 800; letter-spacing: -0.7px; }
-  .style-sub { color: var(--muted); font-size: 14px; margin-top: 4px; }
-
-  .video-meta {
-    display: flex; align-items: center; gap: 12px;
+  /* YouTube thumbnail pill */
+  .yt-pill {
+    display: flex; align-items: center; gap: 0;
     background: var(--surface); border: 1px solid var(--border);
-    border-radius: 12px; padding: 10px 16px;
-  }
-  .video-thumb {
-    width: 44px; height: 30px; border-radius: 6px;
-    background: #1A1714; display: flex; align-items: center;
-    justify-content: center; color: #fff; font-size: 10px;
-    overflow: hidden;
-  }
-  .video-info { font-size: 13px; }
-  .video-title { font-weight: 600; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .video-len { color: var(--muted); font-size: 11px; }
-
-  /* Quick settings bar */
-  .quick-bar {
-    display: flex; gap: 12px; margin-bottom: 36px;
-    flex-wrap: wrap;
-  }
-  .quick-select {
-    display: flex; align-items: center; gap: 8px;
-    background: var(--surface); border: 1.5px solid var(--border);
-    border-radius: 10px; padding: 9px 14px;
-    font-size: 13px; font-weight: 500; cursor: pointer;
-    transition: border-color .2s; min-width: 140px;
-  }
-  .quick-select:hover { border-color: var(--accent); }
-  .quick-label { color: var(--muted); font-size: 11px; margin-right: 4px; }
-  .quick-select select {
-    border: none; background: transparent; font-size: 13px;
-    font-weight: 600; cursor: pointer; outline: none; color: var(--text);
-    -webkit-appearance: none; appearance: none;
-  }
-  .quick-arrow { color: var(--muted); margin-left: auto; }
-
-  /* Section label */
-  .section-label {
-    font-size: 11px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 1px; color: var(--muted); margin-bottom: 16px;
-  }
-
-  /* Template tabs */
-  .tab-bar {
-    display: flex; gap: 2px; background: var(--bg);
-    border: 1px solid var(--border); border-radius: 10px;
-    padding: 3px; width: fit-content; margin-bottom: 24px;
-  }
-  .tab {
-    padding: 7px 18px; border-radius: 8px;
-    font-size: 13px; font-weight: 500; color: var(--muted);
-    cursor: pointer; transition: all .2s; border: none; background: transparent;
-  }
-  .tab.active {
-    background: var(--surface); color: var(--text);
-    box-shadow: 0 1px 4px rgba(0,0,0,.08);
-  }
-
-  /* Style grid */
-  .style-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 14px; margin-bottom: 40px;
-  }
-  .style-card {
-    border-radius: 14px; overflow: hidden;
-    border: 2px solid transparent;
-    cursor: pointer; transition: all .2s;
-    position: relative;
-    aspect-ratio: 9/16;
-    background: #111;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .style-card:hover { border-color: var(--accent); transform: translateY(-2px); }
-  .style-card.selected { border-color: var(--accent); }
-  .style-card.selected::after {
-    content: '✓';
-    position: absolute; top: 8px; right: 8px;
-    width: 22px; height: 22px; border-radius: 50%;
-    background: var(--accent); color: #fff;
-    font-size: 11px; font-weight: 700;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .card-face {
-    width: 100%; height: 100%;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    padding: 16px 12px; gap: 8px;
-  }
-  .card-person {
-    width: 54px; height: 54px; border-radius: 50%;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 22px;
-  }
-  .card-caption {
-    text-align: center; font-size: 11px; padding: 4px 8px;
-    border-radius: 4px; font-weight: 700; line-height: 1.3;
-    max-width: 90%;
-  }
-  .card-name {
-    position: absolute; bottom: 0; left: 0; right: 0;
-    padding: 8px; text-align: center;
-    font-size: 11px; font-weight: 600; color: #fff;
-    background: linear-gradient(transparent, rgba(0,0,0,.6));
-  }
-
-  /* caption style variants */
-  .cap-karaoke { background: #FACC15; color: #000; }
-  .cap-bold { background: #fff; color: #000; font-size: 12px; text-transform: uppercase; }
-  .cap-box { background: rgba(0,0,0,.8); color: #fff; border-radius: 3px; }
-  .cap-outline { color: #fff; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; }
-  .cap-neon { color: #0FF; text-shadow: 0 0 8px #0FF; }
-  .cap-gradient { background: linear-gradient(90deg, #F97316, #EC4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 13px; }
-
-  /* bg variants */
-  .bg-blur { background: linear-gradient(180deg, #2D3748 0%, #1A202C 100%); }
-  .bg-dark { background: #0f0f0f; }
-  .bg-warm { background: linear-gradient(135deg, #3d2c1e, #1a0a00); }
-  .bg-blue { background: linear-gradient(135deg, #1e3a5f, #0d1f3c); }
-  .bg-split { background: linear-gradient(180deg, #fff 50%, #000 50%); }
-  .bg-purple { background: linear-gradient(135deg, #4c1d95, #1e1b4b); }
-
-  /* Enhance options */
-  .enhance-section { margin-bottom: 36px; }
-  .enhance-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 10px;
-  }
-  .enhance-card {
-    background: var(--surface); border: 1.5px solid var(--border);
-    border-radius: 12px; padding: 14px 16px;
-    display: flex; align-items: center; gap: 12px;
-    cursor: pointer; transition: all .2s;
-  }
-  .enhance-card:hover { border-color: var(--accent); }
-  .enhance-card.on { border-color: var(--accent); background: var(--accent-light); }
-  .enhance-icon { font-size: 20px; }
-  .enhance-text { font-size: 13px; font-weight: 600; }
-  .enhance-sub { font-size: 11px; color: var(--muted); }
-  .toggle {
-    width: 32px; height: 18px; border-radius: 9px;
-    background: var(--border); margin-left: auto; position: relative;
-    transition: background .2s; flex-shrink: 0;
-  }
-  .toggle::after {
-    content: ''; position: absolute;
-    width: 14px; height: 14px; border-radius: 50%;
-    background: #fff; top: 2px; left: 2px;
-    transition: left .2s; box-shadow: 0 1px 3px rgba(0,0,0,.2);
-  }
-  .enhance-card.on .toggle { background: var(--accent); }
-  .enhance-card.on .toggle::after { left: 16px; }
-
-  /* AI Brief */
-  .brief-section { margin-bottom: 40px; }
-  .brief-box {
-    background: var(--surface); border: 1.5px solid var(--border);
-    border-radius: 14px; overflow: hidden;
-  }
-  .brief-tags {
-    display: flex; gap: 8px; padding: 14px 16px 0;
-    flex-wrap: wrap;
-  }
-  .brief-tag {
-    background: var(--bg); border: 1px solid var(--border);
-    border-radius: 20px; padding: 5px 12px;
-    font-size: 12px; font-weight: 500; cursor: pointer;
-    transition: all .2s;
-  }
-  .brief-tag:hover, .brief-tag.on {
-    background: var(--accent-light); border-color: var(--accent); color: var(--accent);
-  }
-  .brief-textarea {
-    width: 100%; border: none; resize: none;
-    padding: 12px 16px 14px; font-size: 13px;
-    background: transparent; outline: none; color: var(--text);
-    font-family: inherit; min-height: 80px;
-  }
-  .brief-textarea::placeholder { color: var(--muted); }
-
-  /* CTA */
-  .cta-row {
-    display: flex; justify-content: flex-end; align-items: center; gap: 14px;
-  }
-  .btn-back {
-    background: transparent; border: 1.5px solid var(--border);
-    border-radius: 12px; padding: 13px 24px;
-    font-size: 14px; font-weight: 600; color: var(--muted);
-    cursor: pointer; transition: all .2s;
-  }
-  .btn-back:hover { border-color: var(--text); color: var(--text); }
-  .btn-generate {
-    background: var(--text); color: #fff;
-    border: none; border-radius: 12px;
-    padding: 14px 32px; font-size: 15px; font-weight: 700;
-    cursor: pointer; transition: opacity .2s;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .btn-generate:hover { opacity: .85; }
-  .btn-generate .spark { font-size: 18px; }
-
-  /* ════════════════════════════════════════
-     SCREEN 3 — EDITOR
-  ════════════════════════════════════════ */
-  #screen-editor {
-    display: flex; flex-direction: column;
-    height: calc(100vh - 60px); overflow: hidden;
-  }
-
-  /* Editor top bar */
-  .editor-topbar {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 10px 24px;
-    background: var(--surface); border-bottom: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden; cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06); transition: box-shadow .15s;
     flex-shrink: 0;
   }
-  .editor-tools {
-    display: flex; align-items: center; gap: 4px;
+  .yt-pill:hover { box-shadow: 0 4px 14px rgba(0,0,0,.10); }
+  .yt-thumb {
+    width: 90px; height: 56px; position: relative; flex-shrink: 0;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%);
+    display: flex; align-items: center; justify-content: center; overflow: hidden;
   }
-  .tool-btn {
-    width: 34px; height: 34px; border-radius: 8px;
-    border: none; background: transparent; cursor: pointer;
+  .yt-thumb-bars {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    display: flex; align-items: flex-end; gap: 2px; padding: 4px 5px; height: 100%;
+    justify-content: center; align-items: flex-end;
+  }
+  .yt-bar { width: 4px; border-radius: 2px 2px 0 0; background: rgba(255,255,255,0.25); }
+  .yt-play-btn {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: rgba(255,255,255,0.9);
     display: flex; align-items: center; justify-content: center;
-    font-size: 16px; color: var(--muted); transition: all .2s;
+    position: relative; z-index: 1;
   }
-  .tool-btn:hover { background: var(--bg); color: var(--text); }
-  .editor-title {
-    font-size: 14px; font-weight: 600;
-    display: flex; align-items: center; gap: 6px; cursor: pointer;
+  .yt-play-btn svg { margin-left: 2px; }
+  .yt-thumb-label {
+    position: absolute; bottom: 3px; right: 4px;
+    background: rgba(0,0,0,0.75); color: #fff;
+    font-size: 9px; font-weight: 700; padding: 1px 4px; border-radius: 3px;
   }
-  .editor-title svg { color: var(--muted); }
-  .editor-actions { display: flex; gap: 8px; }
-  .btn-export {
-    background: var(--accent); color: #fff;
-    border: none; border-radius: 9px;
-    padding: 8px 20px; font-size: 13px; font-weight: 700;
-    cursor: pointer; transition: background .2s;
+  .yt-info { padding: 10px 14px; }
+  .yt-title { font-size: 12px; font-weight: 700; white-space: nowrap; }
+  .yt-meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .yt-change { font-size: 11px; color: var(--accent); font-weight: 600; cursor: pointer; margin-top: 2px; display: block; }
+
+  /* quick bar */
+  .quick-bar { display: flex; gap: 8px; margin-bottom: 28px; flex-wrap: wrap; }
+  .quick-pill {
     display: flex; align-items: center; gap: 6px;
+    background: var(--surface); border: 1.5px solid var(--border);
+    border-radius: 20px; padding: 8px 14px; font-size: 12px; font-weight: 500;
+    cursor: pointer; transition: border-color .15s;
   }
-  .btn-export:hover { background: var(--accent-hover); }
+  .quick-pill:hover { border-color: var(--accent); }
+  .quick-pill-label { color: var(--muted); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+  .quick-pill select { border: none; background: transparent; font-size: 12px; font-weight: 700; outline: none; color: var(--text); cursor: pointer; font-family: inherit; }
 
-  /* Editor body */
-  .editor-body {
-    display: flex; flex: 1; overflow: hidden;
-  }
+  /* brief — moved up */
+  .brief-box { background: var(--surface); border: 1.5px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 28px; }
+  .brief-tags { display: flex; gap: 6px; padding: 12px 14px 0; flex-wrap: wrap; }
+  .brief-tag { padding: 5px 12px; border-radius: 20px; background: var(--bg); border: 1px solid var(--border); font-size: 11px; font-weight: 600; cursor: pointer; transition: all .15s; font-family: inherit; }
+  .brief-tag.on, .brief-tag:hover { background: var(--accent-bg); border-color: var(--accent); color: var(--text); }
+  .brief-textarea { width: 100%; border: none; resize: none; padding: 10px 14px 14px; font-size: 13px; background: transparent; outline: none; color: var(--text); font-family: inherit; min-height: 70px; }
+  .brief-textarea::placeholder { color: var(--muted); }
 
-  /* Left panel — transcript */
-  .editor-left {
-    width: 280px; flex-shrink: 0;
-    background: var(--surface); border-right: 1px solid var(--border);
-    display: flex; flex-direction: column; overflow: hidden;
-  }
-  .panel-tabs {
-    display: flex; border-bottom: 1px solid var(--border);
-  }
-  .panel-tab {
-    flex: 1; padding: 12px; text-align: center;
-    font-size: 13px; font-weight: 500; color: var(--muted);
-    cursor: pointer; border: none; background: transparent;
-    border-bottom: 2px solid transparent; transition: all .2s;
-  }
-  .panel-tab.active {
-    color: var(--text); border-bottom-color: var(--accent);
-  }
-  .panel-search {
-    padding: 12px; border-bottom: 1px solid var(--border);
-  }
-  .panel-search input {
-    width: 100%; border: 1.5px solid var(--border);
-    border-radius: 8px; padding: 8px 12px; font-size: 13px;
-    background: var(--bg); outline: none; color: var(--text);
-  }
+  /* section header */
+  .sec-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 12px; }
+  .tmpl-tabs { display: flex; gap: 2px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 3px; width: fit-content; margin-bottom: 18px; }
+  .tmpl-tab { padding: 6px 16px; border-radius: 7px; font-size: 12px; font-weight: 600; color: var(--muted); cursor: pointer; border: none; background: transparent; transition: all .15s; font-family: inherit; }
+  .tmpl-tab.active { background: var(--surface); color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,.07); }
+
+  /* style grid — 5 per row, 2 rows = 10 */
+  .style-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 28px; }
+  .style-card { border-radius: 12px; overflow: hidden; border: 2px solid var(--border); cursor: pointer; transition: all .18s; position: relative; aspect-ratio: 9/16; background: #111; }
+  .style-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.12); }
+  .style-card.sel { border-color: var(--accent); }
+  .style-card.sel::after { content: '✓'; position: absolute; top: 6px; right: 6px; width: 18px; height: 18px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 9px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .card-bg { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 8px; gap: 6px; position: relative; }
+  .card-avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; background: rgba(255,255,255,0.12); }
+  .card-cap { text-align: center; font-size: 8px; padding: 3px 6px; border-radius: 3px; font-weight: 800; line-height: 1.3; max-width: 90%; }
+  .card-label { position: absolute; bottom: 0; left: 0; right: 0; padding: 6px 4px 5px; text-align: center; font-size: 9px; font-weight: 700; color: #fff; background: linear-gradient(transparent, rgba(0,0,0,.7)); }
+
+  /* enhancements */
+  .enhance-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 28px; }
+  .enh-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: 12px; padding: 14px 14px 12px; cursor: pointer; transition: all .15s; }
+  .enh-card:hover { border-color: var(--accent); }
+  .enh-card.on { border-color: var(--accent); background: var(--accent-bg); }
+  .enh-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+  .enh-icon { font-size: 18px; }
+  .enh-toggle { width: 30px; height: 17px; border-radius: 9px; background: var(--border); position: relative; transition: background .2s; }
+  .enh-toggle::after { content: ''; position: absolute; width: 13px; height: 13px; border-radius: 50%; background: #fff; top: 2px; left: 2px; transition: left .2s; box-shadow: 0 1px 2px rgba(0,0,0,.2); }
+  .enh-card.on .enh-toggle { background: var(--accent); }
+  .enh-card.on .enh-toggle::after { left: 15px; }
+  .enh-title { font-size: 12px; font-weight: 700; }
+  .enh-sub { font-size: 11px; color: var(--muted); }
+
+  /* cta */
+  .cta-row { display: flex; justify-content: flex-end; gap: 10px; padding-bottom: 40px; }
+  .btn-back-s { background: transparent; border: 1.5px solid var(--border); border-radius: 10px; padding: 12px 20px; font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; font-family: inherit; transition: all .15s; }
+  .btn-back-s:hover { border-color: var(--text); color: var(--text); }
+  .btn-generate { background: var(--text); color: #fff; border: none; border-radius: 10px; padding: 13px 28px; font-size: 14px; font-weight: 800; cursor: pointer; font-family: inherit; transition: opacity .15s; display: flex; align-items: center; gap: 7px; }
+  .btn-generate:hover { opacity: .82; }
+
+  /* ════════════ SCREEN 3 — EDITOR ════════════ */
+  #screen-editor { flex: 1; height: calc(100vh - 52px); overflow: hidden; display: flex; flex-direction: column; }
+  .editor-topbar { display: flex; align-items: center; justify-content: space-between; padding: 0 20px; height: 48px; background: var(--surface); border-bottom: 1px solid var(--border); flex-shrink: 0; }
+  .ed-tools { display: flex; align-items: center; gap: 2px; }
+  .ed-tool { width: 30px; height: 30px; border-radius: 7px; border: none; background: transparent; cursor: pointer; font-size: 14px; color: var(--muted); display: flex; align-items: center; justify-content: center; transition: all .15s; }
+  .ed-tool:hover { background: var(--bg); color: var(--text); }
+  .ed-title { font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 5px; cursor: pointer; }
+  .ed-actions { display: flex; gap: 8px; align-items: center; }
+  .btn-restyle { background: transparent; border: 1.5px solid var(--border); border-radius: 8px; padding: 6px 14px; font-size: 12px; font-weight: 600; color: var(--muted); cursor: pointer; font-family: inherit; transition: all .15s; }
+  .btn-restyle:hover { border-color: var(--text); color: var(--text); }
+  .btn-export { background: var(--accent); color: #fff; border: none; border-radius: 8px; padding: 7px 18px; font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit; }
+
+  .editor-body { display: flex; flex: 1; overflow: hidden; min-height: 0; }
+
+  /* LEFT */
+  .ed-left { width: 260px; flex-shrink: 0; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
+  .panel-tabs { display: flex; border-bottom: 1px solid var(--border); }
+  .panel-tab { flex: 1; padding: 11px; text-align: center; font-size: 12px; font-weight: 600; color: var(--muted); cursor: pointer; border: none; background: transparent; border-bottom: 2px solid transparent; transition: all .15s; font-family: inherit; }
+  .panel-tab.active { color: var(--text); border-bottom-color: var(--accent); }
+  .panel-search { padding: 10px 12px; border-bottom: 1px solid var(--border); }
+  .panel-search input { width: 100%; border: 1.5px solid var(--border); border-radius: 8px; padding: 7px 11px; font-size: 12px; background: var(--bg); outline: none; color: var(--text); font-family: inherit; }
   .panel-search input:focus { border-color: var(--accent); }
-  .transcript-list { flex: 1; overflow-y: auto; padding: 8px; }
-  .transcript-block {
-    padding: 10px 12px; border-radius: 10px;
-    font-size: 13px; line-height: 1.6; color: var(--text);
-    cursor: pointer; transition: background .15s; margin-bottom: 2px;
-  }
-  .transcript-block:hover { background: var(--bg); }
-  .transcript-block.active { background: var(--accent-light); }
-  .transcript-block .ts {
-    font-size: 10px; color: var(--muted); font-weight: 600;
-    margin-bottom: 2px;
-  }
+  .transcript-list { flex: 1; overflow-y: auto; padding: 6px; }
+  .tx-block { padding: 9px 11px; border-radius: 8px; font-size: 12px; line-height: 1.6; color: var(--text); cursor: pointer; transition: background .12s; margin-bottom: 2px; }
+  .tx-block:hover { background: var(--bg); }
+  .tx-block.act { background: var(--accent-bg); }
+  .tx-time { font-size: 10px; color: var(--muted); font-weight: 700; margin-bottom: 2px; }
 
-  /* Center — preview */
-  .editor-center {
-    flex: 1; display: flex; flex-direction: column;
-    align-items: center; justify-content: flex-start;
-    padding: 24px; background: var(--bg); overflow-y: auto; gap: 16px;
-  }
-  .phone-frame {
-    width: 220px;
-    background: #111; border-radius: 28px;
-    overflow: hidden; position: relative;
-    box-shadow: 0 24px 60px rgba(0,0,0,.3);
-    border: 6px solid #222;
-    aspect-ratio: 9/16;
-  }
-  .phone-video {
-    width: 100%; height: 100%;
-    background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    position: relative; overflow: hidden;
-  }
-  .phone-person {
-    font-size: 48px; position: absolute; top: 50%; left: 50%;
-    transform: translate(-50%, -55%);
-  }
-  .phone-caption-area {
-    position: absolute; bottom: 60px; left: 0; right: 0;
-    text-align: center; padding: 0 16px;
-  }
-  .phone-caption {
-    display: inline-block; font-size: 13px; font-weight: 800;
-    line-height: 1.3; letter-spacing: 0.3px;
-  }
-  .phone-controls {
-    position: absolute; bottom: 12px; left: 0; right: 0;
-    display: flex; align-items: center; justify-content: center; gap: 12px;
-    padding: 0 12px;
-  }
-  .play-btn {
-    width: 32px; height: 32px; border-radius: 50%;
-    background: rgba(255,255,255,.15); border: none; color: #fff;
-    font-size: 12px; cursor: pointer; display: flex;
-    align-items: center; justify-content: center;
-  }
-  .progress-bar-wrap {
-    flex: 1; height: 3px; background: rgba(255,255,255,.2); border-radius: 2px;
-  }
-  .progress-bar-fill {
-    width: 35%; height: 100%; background: var(--accent); border-radius: 2px;
-  }
+  /* CENTER */
+  .ed-center { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 20px; background: var(--bg); overflow-y: auto; gap: 14px; }
+  .phone-frame { width: 210px; background: #0f0f0f; border-radius: 28px; overflow: hidden; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,.28); border: 5px solid #1a1a1a; aspect-ratio: 9/16; flex-shrink: 0; }
+  .phone-inner { width: 100%; height: 100%; position: relative; background: linear-gradient(180deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%); display: flex; align-items: center; justify-content: center; }
+  .phone-person { font-size: 52px; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-55%); }
+  .phone-cap-area { position: absolute; bottom: 52px; left: 0; right: 0; text-align: center; padding: 0 14px; }
+  .phone-cap { display: inline-block; font-size: 13px; font-weight: 900; line-height: 1.3; background: #FACC15; color: #000; padding: 4px 9px; border-radius: 3px; }
+  .phone-prog { position: absolute; bottom: 10px; left: 10px; right: 10px; display: flex; align-items: center; gap: 8px; }
+  .ph-play { width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,.15); border: none; color: #fff; font-size: 10px; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .ph-bar { flex: 1; height: 2px; background: rgba(255,255,255,.2); border-radius: 1px; }
+  .ph-fill { width: 35%; height: 100%; background: var(--accent); border-radius: 1px; }
+  .ph-time { font-size: 9px; color: rgba(255,255,255,.5); }
 
-  /* Playback controls below frame */
-  .playback-controls {
-    width: 100%; max-width: 420px;
-    background: var(--surface); border-radius: 14px;
-    padding: 14px 20px; border: 1px solid var(--border);
-  }
-  .pb-row1 {
-    display: flex; align-items: center; justify-content: center; gap: 16px;
-    margin-bottom: 10px;
-  }
-  .pb-btn {
-    width: 36px; height: 36px; border-radius: 50%;
-    border: none; background: var(--bg); cursor: pointer;
-    font-size: 14px; display: flex; align-items: center; justify-content: center;
-    transition: background .2s;
-  }
+  /* playback */
+  .pb-box { width: 100%; max-width: 400px; background: var(--surface); border-radius: 12px; padding: 12px 16px; border: 1px solid var(--border); }
+  .pb-btns { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 10px; }
+  .pb-btn { width: 32px; height: 32px; border-radius: 50%; border: none; background: var(--bg); cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; transition: background .15s; }
   .pb-btn:hover { background: var(--border); }
-  .pb-btn.primary {
-    width: 44px; height: 44px; background: var(--text); color: #fff; font-size: 16px;
+  .pb-btn.pri { width: 40px; height: 40px; background: var(--text); color: #fff; font-size: 14px; }
+  .pb-line { height: 3px; background: var(--border); border-radius: 2px; margin-bottom: 5px; position: relative; cursor: pointer; }
+  .pb-prog { height: 100%; width: 35%; background: var(--accent); border-radius: 2px; }
+  .pb-prog::after { content: ''; position: absolute; right: -5px; top: -4px; width: 11px; height: 11px; border-radius: 50%; background: var(--accent); }
+  .pb-times { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); }
+
+  /* clip strip — BIGGER thumbnails */
+  .clip-strip { width: 100%; max-width: 600px; }
+  .strip-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 10px; }
+  .clips-row { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 6px; }
+  .clip-th {
+    flex-shrink: 0; width: 90px; height: 130px; border-radius: 12px;
+    background: #1a1a2e; border: 2.5px solid var(--border);
+    cursor: pointer; transition: all .15s; position: relative;
+    display: flex; align-items: center; justify-content: center; font-size: 26px;
+    overflow: hidden;
   }
-  .pb-timeline {
-    height: 4px; background: var(--border); border-radius: 2px; position: relative;
-    margin-bottom: 6px; cursor: pointer;
+  .clip-th:hover, .clip-th.act { border-color: var(--accent); box-shadow: 0 4px 12px rgba(200,168,75,.25); }
+  .clip-th .cn { position: absolute; top: 5px; left: 6px; font-size: 9px; font-weight: 700; color: rgba(255,255,255,.8); background: rgba(0,0,0,.4); padding: 1px 5px; border-radius: 3px; }
+  .clip-th .cd { position: absolute; bottom: 5px; right: 6px; font-size: 9px; font-weight: 700; color: rgba(255,255,255,.7); background: rgba(0,0,0,.4); padding: 1px 5px; border-radius: 3px; }
+  .clip-th .score { position: absolute; top: 5px; right: 6px; font-size: 8px; font-weight: 800; color: #FACC15; }
+
+  /* ── TIMELINE ── */
+  .timeline-panel {
+    flex-shrink: 0; background: #111; border-top: 1px solid #2a2a2a;
+    display: flex; flex-direction: column; height: 180px;
+    font-family: 'Inter', sans-serif;
   }
-  .pb-fill {
-    height: 100%; width: 35%; background: var(--accent); border-radius: 2px;
+  .timeline-toolbar {
+    display: flex; align-items: center; padding: 0 16px; height: 38px;
+    border-bottom: 1px solid #2a2a2a; gap: 8px; flex-shrink: 0;
   }
-  .pb-fill::after {
-    content: ''; position: absolute; right: -5px; top: -4px;
-    width: 12px; height: 12px; border-radius: 50%;
-    background: var(--accent); box-shadow: 0 0 0 3px rgba(212,168,67,.2);
+  .tl-btn {
+    width: 28px; height: 28px; border-radius: 6px; border: none;
+    background: rgba(255,255,255,.08); color: rgba(255,255,255,.7);
+    font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: background .15s;
   }
-  .pb-times {
-    display: flex; justify-content: space-between;
-    font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums;
+  .tl-btn:hover { background: rgba(255,255,255,.15); }
+  .tl-btn.active { background: rgba(200,168,75,.3); color: var(--accent); }
+  .tl-hide { font-size: 11px; color: rgba(255,255,255,.4); cursor: pointer; margin-right: 4px; }
+  .tl-hide:hover { color: rgba(255,255,255,.7); }
+  .tl-sep { width: 1px; height: 18px; background: #2a2a2a; margin: 0 4px; }
+  .tl-time {
+    margin: 0 auto; font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums;
+    color: #fff; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;
+  }
+  .tl-time .slash { color: rgba(255,255,255,.3); }
+  .tl-time .total { color: rgba(255,255,255,.4); font-weight: 500; }
+  .tl-zoom { display: flex; align-items: center; gap: 6px; margin-left: auto; }
+  .tl-zoom-icon { font-size: 12px; color: rgba(255,255,255,.4); }
+  .tl-zoom-track {
+    width: 80px; height: 3px; background: #333; border-radius: 2px; position: relative; cursor: pointer;
+  }
+  .tl-zoom-thumb {
+    position: absolute; width: 12px; height: 12px; border-radius: 50%;
+    background: #fff; top: -4px; left: 40%; cursor: grab;
+    box-shadow: 0 1px 4px rgba(0,0,0,.5);
   }
 
-  /* Clip strip */
-  .clip-strip {
-    width: 100%; max-width: 420px;
+  .timeline-body { flex: 1; display: flex; overflow: hidden; }
+  .tl-side {
+    width: 44px; flex-shrink: 0; background: #0f0f0f;
+    border-right: 1px solid #2a2a2a;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
   }
-  .clip-strip-label {
-    font-size: 11px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 1px; color: var(--muted); margin-bottom: 8px;
+  .tl-add-btn {
+    width: 26px; height: 26px; border-radius: 6px; border: 1px solid #333;
+    background: transparent; color: rgba(255,255,255,.5); font-size: 16px;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: all .15s;
   }
-  .clips-row {
-    display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px;
+  .tl-add-btn:hover { background: #222; color: #fff; }
+
+  .tl-tracks { flex: 1; overflow-x: auto; overflow-y: hidden; position: relative; }
+  .tl-ruler {
+    height: 22px; background: #0f0f0f; border-bottom: 1px solid #2a2a2a;
+    display: flex; align-items: center; padding: 0 2px; position: relative; flex-shrink: 0;
   }
-  .clip-thumb {
-    flex-shrink: 0; width: 60px; height: 90px; border-radius: 10px;
-    background: #1a1a2e; border: 2px solid transparent;
-    cursor: pointer; transition: all .2s; position: relative;
+  .tl-tick {
+    position: absolute; display: flex; flex-direction: column; align-items: center;
+    font-size: 9px; color: rgba(255,255,255,.3); font-weight: 600;
+  }
+  .tl-tick::before { content: ''; width: 1px; height: 5px; background: rgba(255,255,255,.2); margin-bottom: 2px; }
+
+  .tl-video-track {
+    height: 68px; background: #1a1a1a; border-bottom: 1px solid #2a2a2a;
+    display: flex; position: relative; overflow: hidden;
+  }
+  .tl-clip-segment {
+    position: absolute; top: 4px; bottom: 4px; border-radius: 4px; overflow: hidden;
+    border: 1px solid rgba(255,255,255,.1);
+  }
+  .tl-clip-label {
+    position: absolute; top: 3px; left: 5px;
+    font-size: 9px; font-weight: 600; color: rgba(255,255,255,.6);
+    background: rgba(0,0,0,.3); padding: 1px 4px; border-radius: 2px;
+  }
+  .filmstrip {
+    width: 100%; height: 100%; display: flex; overflow: hidden;
+  }
+  .film-frame {
+    flex-shrink: 0; height: 100%; border-right: 1px solid rgba(0,0,0,.4);
     display: flex; align-items: center; justify-content: center;
-    font-size: 20px; overflow: hidden;
-  }
-  .clip-thumb:hover { border-color: var(--accent); }
-  .clip-thumb.active { border-color: var(--accent); }
-  .clip-thumb .clip-num {
-    position: absolute; top: 4px; left: 5px;
-    font-size: 9px; font-weight: 700; color: #fff;
-    background: rgba(0,0,0,.5); border-radius: 3px; padding: 1px 4px;
-  }
-  .clip-thumb .clip-dur {
-    position: absolute; bottom: 4px; right: 5px;
-    font-size: 9px; font-weight: 600; color: rgba(255,255,255,.7);
+    font-size: 11px; overflow: hidden;
   }
 
-  /* Right panel — styles */
-  .editor-right {
-    width: 260px; flex-shrink: 0;
-    background: var(--surface); border-left: 1px solid var(--border);
-    display: flex; flex-direction: column; overflow: hidden;
+  .tl-waveform {
+    height: 46px; background: #111; position: relative; overflow: hidden;
   }
-  .right-tabs {
-    display: flex; border-bottom: 1px solid var(--border); flex-shrink: 0;
+  .waveform-svg { width: 100%; height: 100%; }
+
+  /* Playhead */
+  .tl-playhead {
+    position: absolute; top: 0; bottom: 0; width: 1px;
+    background: var(--accent); left: 8%;
+    pointer-events: none; z-index: 10;
   }
-  .right-tab {
-    flex: 1; padding: 11px 6px; text-align: center;
-    font-size: 12px; font-weight: 500; color: var(--muted);
-    cursor: pointer; border: none; background: transparent;
-    border-bottom: 2px solid transparent; transition: all .2s;
-  }
-  .right-tab.active { color: var(--text); border-bottom-color: var(--accent); }
-  .right-content { flex: 1; overflow-y: auto; padding: 16px 12px; }
-  .right-section { margin-bottom: 20px; }
-  .right-section-title {
-    font-size: 10px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 1px; color: var(--muted); margin-bottom: 10px;
+  .tl-playhead::before {
+    content: ''; position: absolute; top: -1px; left: -5px;
+    width: 11px; height: 11px; background: var(--accent); border-radius: 2px;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
   }
 
-  /* Mini style grid */
-  .mini-style-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
-  }
-  .mini-card {
-    height: 60px; border-radius: 8px; overflow: hidden;
-    background: #111; cursor: pointer; position: relative;
-    display: flex; align-items: center; justify-content: center;
-    border: 2px solid transparent; transition: all .15s;
-  }
+  /* RIGHT */
+  .ed-right { width: 240px; flex-shrink: 0; background: var(--surface); border-left: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
+  .r-tabs { display: flex; border-bottom: 1px solid var(--border); }
+  .r-tab { flex: 1; padding: 10px 4px; text-align: center; font-size: 11px; font-weight: 600; color: var(--muted); cursor: pointer; border: none; background: transparent; border-bottom: 2px solid transparent; transition: all .15s; font-family: inherit; }
+  .r-tab.active { color: var(--text); border-bottom-color: var(--accent); }
+  .r-body { flex: 1; overflow-y: auto; padding: 14px 12px; }
+  .r-sec { margin-bottom: 18px; }
+  .r-sec-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 10px; }
+  .mini-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .mini-card { height: 54px; border-radius: 7px; overflow: hidden; background: #111; cursor: pointer; position: relative; display: flex; align-items: center; justify-content: center; border: 2px solid var(--border); transition: all .12s; }
   .mini-card:hover { border-color: var(--accent); }
-  .mini-card.selected { border-color: var(--accent); }
-  .mini-card.selected::after {
-    content: '✓'; position: absolute; top: 3px; right: 4px;
-    font-size: 9px; color: var(--accent); font-weight: 700;
-  }
-  .mini-caption {
-    font-size: 9px; font-weight: 800; text-align: center; padding: 0 4px;
-  }
+  .mini-card.sel { border-color: var(--accent); }
+  .mini-card.sel::after { content: '✓'; position: absolute; top: 2px; right: 3px; font-size: 8px; color: var(--accent); font-weight: 800; }
+  .mini-cap { font-size: 8px; font-weight: 800; text-align: center; padding: 0 3px; }
+  .font-opts { display: flex; flex-direction: column; gap: 5px; }
+  .font-opt { padding: 7px 10px; border-radius: 7px; border: 1.5px solid var(--border); cursor: pointer; font-size: 12px; transition: all .12s; font-family: inherit; }
+  .font-opt:hover { border-color: var(--accent); }
+  .font-opt.sel { border-color: var(--accent); background: var(--accent-bg); }
+  .swatches { display: flex; gap: 6px; flex-wrap: wrap; }
+  .sw { width: 24px; height: 24px; border-radius: 50%; cursor: pointer; transition: transform .12s; border: 2px solid transparent; }
+  .sw:hover { transform: scale(1.15); }
+  .sw.sel { border: 2.5px solid var(--text); }
+  .tog-row { display: flex; align-items: center; justify-content: space-between; padding: 7px 0; }
+  .tog-label { font-size: 12px; font-weight: 500; }
+  .tog { width: 32px; height: 18px; border-radius: 9px; background: var(--border); position: relative; cursor: pointer; transition: background .15s; flex-shrink: 0; }
+  .tog::after { content: ''; position: absolute; width: 14px; height: 14px; border-radius: 50%; background: #fff; top: 2px; left: 2px; transition: left .15s; box-shadow: 0 1px 2px rgba(0,0,0,.15); }
+  .tog.on { background: var(--accent); }
+  .tog.on::after { left: 16px; }
 
-  /* Font picker */
-  .font-grid {
-    display: flex; flex-direction: column; gap: 6px;
-  }
-  .font-option {
-    padding: 8px 12px; border-radius: 8px;
-    border: 1.5px solid var(--border); cursor: pointer;
-    font-size: 13px; transition: all .15s;
-  }
-  .font-option:hover { border-color: var(--accent); }
-  .font-option.selected { border-color: var(--accent); background: var(--accent-light); }
-
-  /* Color swatches */
-  .color-row {
-    display: flex; gap: 8px; flex-wrap: wrap;
-  }
-  .swatch {
-    width: 28px; height: 28px; border-radius: 50%;
-    cursor: pointer; transition: transform .15s;
-    border: 2px solid transparent;
-  }
-  .swatch:hover { transform: scale(1.15); }
-  .swatch.selected { border: 3px solid var(--text); }
-
-  /* Toggle row */
-  .toggle-row {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 8px 0;
-  }
-  .toggle-row-label { font-size: 13px; font-weight: 500; }
-  .mini-toggle {
-    width: 36px; height: 20px; border-radius: 10px;
-    background: var(--border); position: relative;
-    cursor: pointer; transition: background .2s;
-  }
-  .mini-toggle::after {
-    content: ''; position: absolute; width: 16px; height: 16px;
-    border-radius: 50%; background: #fff; top: 2px; left: 2px;
-    transition: left .2s; box-shadow: 0 1px 3px rgba(0,0,0,.15);
-  }
-  .mini-toggle.on { background: var(--accent); }
-  .mini-toggle.on::after { left: 18px; }
-
-  /* Scrollbar */
-  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
   ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
-  /* Responsive */
-  @media (max-width: 900px) {
-    .editor-left, .editor-right { display: none; }
+  /* clip length badge in quick bar */
+  .clip-len-badge {
+    display: inline-block; font-size: 10px; font-weight: 700;
+    background: var(--accent-bg); color: var(--accent);
+    border-radius: 4px; padding: 1px 5px; margin-left: 4px;
   }
 </style>
 </head>
 <body>
 
-<!-- ══════════ NAV ══════════ -->
-<nav>
-  <div class="nav-logo">
-    <div class="logo-mark">J</div>
-    Joltra
-  </div>
-
-  <div class="nav-steps">
-    <div class="step-item active" id="nav-1" onclick="goTo(1)">
-      <div class="step-num">1</div> Import
+<!-- ══ SIDEBAR ══ -->
+<div class="sidebar">
+  <div class="sidebar-logo"><div class="logo-sq">J</div>JOLTRA</div>
+  <nav>
+    <a class="nav-item" href="#"><span class="nav-icon">⊞</span> Dashboard</a>
+    <a class="nav-item active" href="#"><span class="nav-icon">✦</span> New clip</a>
+    <a class="nav-item" href="#"><span class="nav-icon">▤</span> My clips</a>
+    <a class="nav-item" href="#"><span class="nav-icon">◎</span> Review</a>
+    <a class="nav-item" href="#"><span class="nav-icon">↗</span> Publish</a>
+    <div class="nav-group-label">Grow</div>
+    <a class="nav-item" href="#"><span class="nav-icon">◈</span> Brand kit</a>
+  </nav>
+  <div class="sidebar-bottom">
+    <div class="user-row">
+      <div class="user-avatar">KR</div>
+      <div><div class="user-name">Kyndall Ramirez</div><div class="user-plan">Free · Trial</div></div>
     </div>
-    <div class="step-connector"></div>
-    <div class="step-item" id="nav-2" onclick="goTo(2)">
-      <div class="step-num">2</div> Choose style
-    </div>
-    <div class="step-connector"></div>
-    <div class="step-item" id="nav-3" onclick="goTo(3)">
-      <div class="step-num">3</div> Edit & export
-    </div>
-  </div>
-
-  <div class="nav-right">
-    <span class="credits-badge">✦ 30 min left</span>
-    <button class="btn-upgrade">Upgrade</button>
-    <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:13px;cursor:pointer;">KR</div>
-  </div>
-</nav>
-
-<!-- ══════════ SCREEN 1: UPLOAD ══════════ -->
-<div id="screen-upload" class="screen active">
-  <div class="upload-card">
-    <div class="upload-headline">Drop your video.</div>
-    <p class="upload-sub">Paste a link or upload a file — we'll handle the rest.</p>
-
-    <div class="url-row">
-      <div class="url-input-wrap">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/>
-          <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/>
-        </svg>
-        <input class="url-input" id="url-input" type="text" placeholder="https://www.youtube.com/watch?v=..." />
-      </div>
-      <button class="btn-continue" onclick="goTo(2)">Continue →</button>
-    </div>
-
-    <div class="divider">or upload a file</div>
-
-    <div class="drop-zone" onclick="goTo(2)">
-      <div class="drop-icon">📁</div>
-      <div class="drop-title">Drag & drop your video here</div>
-      <p class="drop-sub"><a href="#">Click to browse</a> &nbsp;·&nbsp; MP4, MOV, MKV, MP3, WAV</p>
-    </div>
-
-    <div class="import-options">
-      <button class="import-btn" onclick="goTo(2)">
-        <div class="import-icon zoom-icon">Z</div>
-        Import from Zoom
-      </button>
-      <button class="import-btn" onclick="goTo(2)">
-        <div class="import-icon record-icon">●</div>
-        Record video
-      </button>
-    </div>
+    <div class="min-bar"><div class="min-fill"></div></div>
+    <div class="min-label">0 / 30 minutes used</div>
   </div>
 </div>
 
-<!-- ══════════ SCREEN 2: STYLE PICKER ══════════ -->
-<div id="screen-style" class="screen">
+<!-- ══ MAIN ══ -->
+<div class="main">
 
-  <div class="style-header">
-    <div>
-      <div class="style-headline">Pick your style.</div>
-      <p class="style-sub">Choose a caption template — you can fine-tune everything next.</p>
+  <div class="topbar">
+    <div class="topbar-title" id="topbar-title">New clip</div>
+    <div class="step-nav">
+      <div class="step-pill active" id="sp1" onclick="goTo(1)"><div class="step-dot">1</div>Import</div>
+      <span class="step-sep">›</span>
+      <div class="step-pill" id="sp2" onclick="goTo(2)"><div class="step-dot">2</div>Choose style</div>
+      <span class="step-sep">›</span>
+      <div class="step-pill" id="sp3" onclick="goTo(3)"><div class="step-dot">3</div>Edit & export</div>
     </div>
-    <div class="video-meta">
-      <div class="video-thumb">▶</div>
-      <div class="video-info">
-        <div class="video-title">My YouTube Video</div>
-        <div class="video-len">12:34 &nbsp;·&nbsp; 1080p</div>
+    <div class="topbar-right">
+      <div class="topbar-btn">?</div>
+      <button class="btn-upgrade">Upgrade</button>
+    </div>
+  </div>
+
+  <!-- ══ SCREEN 1: UPLOAD ══ -->
+  <div id="screen-upload" class="screen active">
+    <div class="upload-headline">Create clips from one source.</div>
+    <p class="upload-sub">Paste a video link (or upload a file), choose the output, and let the editor build the first pass.</p>
+    <div class="upload-card">
+      <div class="source-tabs">
+        <button class="source-tab active">Paste link</button>
+        <button class="source-tab" onclick="swSourceTab(this)">File upload</button>
+      </div>
+      <div class="url-row">
+        <div class="url-wrap">
+          <span class="url-label">URL</span>
+          <input class="url-input" type="text" placeholder="https://www.youtube.com/watch?v=…" />
+        </div>
+        <button class="btn-continue" onclick="goTo(2)">Continue →</button>
+      </div>
+      <div class="or-divider">or upload a file</div>
+      <div class="drop-zone" onclick="goTo(2)">
+        <div class="drop-icon">📁</div>
+        <div class="drop-title">Drag & drop your video here</div>
+        <p class="drop-sub"><span>Click to browse</span> · MP4, MOV, MKV, MP3, WAV</p>
       </div>
     </div>
   </div>
 
-  <!-- Quick settings -->
-  <div class="quick-bar">
-    <div class="quick-select">
-      <span class="quick-label">FORMAT</span>
-      <select><option>9:16 Vertical</option><option>16:9 Landscape</option><option>1:1 Square</option><option>4:5 Portrait</option></select>
-      <span class="quick-arrow">▾</span>
-    </div>
-    <div class="quick-select">
-      <span class="quick-label">CLIP LENGTH</span>
-      <select><option>45–75s</option><option>&lt;30s</option><option>30–45s</option><option>75s+</option></select>
-      <span class="quick-arrow">▾</span>
-    </div>
-    <div class="quick-select">
-      <span class="quick-label">QUALITY</span>
-      <select><option>1080p</option><option>1440p</option><option>4K</option></select>
-      <span class="quick-arrow">▾</span>
-    </div>
-    <div class="quick-select">
-      <span class="quick-label">MODE</span>
-      <select><option>AI Clipping</option><option>Full Video</option></select>
-      <span class="quick-arrow">▾</span>
-    </div>
-  </div>
+  <!-- ══ SCREEN 2: STYLE ══ -->
+  <div id="screen-style" class="screen">
 
-  <!-- Template section -->
-  <div class="section-label">Caption Templates</div>
-  <div class="tab-bar">
-    <button class="tab active">Trending</button>
-    <button class="tab">My templates</button>
-    <button class="tab">Brand kit ✦</button>
-  </div>
-
-  <div class="style-grid" id="style-grid">
-    <!-- Cards injected by JS -->
-  </div>
-
-  <!-- Enhance section -->
-  <div class="enhance-section">
-    <div class="section-label">Enhancements</div>
-    <div class="enhance-grid">
-      <div class="enhance-card on" onclick="this.classList.toggle('on')">
-        <span class="enhance-icon">😄</span>
-        <div><div class="enhance-text">Add emoji</div><div class="enhance-sub">Auto-place reactions</div></div>
-        <div class="toggle"></div>
+    <div class="style2-header">
+      <div>
+        <div class="page-headline">Pick your style.</div>
+        <p class="page-sub">Choose a caption template — you can fine-tune everything in the editor.</p>
       </div>
-      <div class="enhance-card on" onclick="this.classList.toggle('on')">
-        <span class="enhance-icon">🔥</span>
-        <div><div class="enhance-text">Highlight keywords</div><div class="enhance-sub">Emphasize key words</div></div>
-        <div class="toggle"></div>
-      </div>
-      <div class="enhance-card" onclick="this.classList.toggle('on')">
-        <span class="enhance-icon">✂️</span>
-        <div><div class="enhance-text">Remove silences</div><div class="enhance-sub">Trim dead air</div></div>
-        <div class="toggle"></div>
-      </div>
-      <div class="enhance-card" onclick="this.classList.toggle('on')">
-        <span class="enhance-icon">🎬</span>
-        <div><div class="enhance-text">Add B-roll ✦</div><div class="enhance-sub">Auto insert footage</div></div>
-        <div class="toggle"></div>
+      <!-- YouTube thumbnail pill -->
+      <div class="yt-pill" onclick="goTo(1)">
+        <div class="yt-thumb">
+          <div class="yt-thumb-bars">
+            <div class="yt-bar" style="height:30%"></div>
+            <div class="yt-bar" style="height:60%"></div>
+            <div class="yt-bar" style="height:45%"></div>
+            <div class="yt-bar" style="height:80%"></div>
+            <div class="yt-bar" style="height:55%"></div>
+            <div class="yt-bar" style="height:70%"></div>
+            <div class="yt-bar" style="height:40%"></div>
+            <div class="yt-bar" style="height:90%"></div>
+            <div class="yt-bar" style="height:50%"></div>
+            <div class="yt-bar" style="height:65%"></div>
+          </div>
+          <!-- simulated face -->
+          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:20px;z-index:1;">👩</div>
+          <div class="yt-thumb-label">12:34</div>
+        </div>
+        <div class="yt-info">
+          <div class="yt-title">My YouTube Video</div>
+          <div class="yt-meta">12:34 · 1080p</div>
+          <span class="yt-change">Change →</span>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- AI Brief -->
-  <div class="brief-section">
-    <div class="section-label">Brief the AI <span style="font-size:11px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0;">(optional)</span></div>
-    <div class="brief-box">
+    <!-- Quick settings -->
+    <div class="quick-bar">
+      <div class="quick-pill">
+        <span class="quick-pill-label">Format</span>
+        <select><option>9:16 Vertical</option><option>16:9 Landscape</option><option>1:1 Square</option><option>4:5 Portrait</option></select>
+      </div>
+      <div class="quick-pill">
+        <span class="quick-pill-label">Clip length</span>
+        <select id="clip-length-select" onchange="updateClipLength(this)">
+          <option value="30">&lt;30s</option>
+          <option value="45" selected>30–45s</option>
+          <option value="75">45–75s</option>
+          <option value="999">75s+</option>
+        </select>
+        <span class="clip-len-badge" id="clip-len-badge">~5 clips</span>
+      </div>
+      <div class="quick-pill">
+        <span class="quick-pill-label">Quality</span>
+        <select><option>1080p</option><option>1440p</option><option>4K</option></select>
+      </div>
+      <div class="quick-pill">
+        <span class="quick-pill-label">Mode</span>
+        <select><option>AI Clipping</option><option>Full Video</option></select>
+      </div>
+    </div>
+
+    <!-- BRIEF THE AI — moved above templates -->
+    <div class="sec-label">Brief the AI <span style="font-size:11px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0;">(optional)</span></div>
+    <div class="brief-box" style="margin-bottom:28px;">
       <div class="brief-tags">
         <span class="brief-tag on">Best moments</span>
         <span class="brief-tag" onclick="this.classList.toggle('on')">Hooks</span>
@@ -867,334 +596,395 @@
       </div>
       <textarea class="brief-textarea" placeholder="Tell AI exact moments or topics to prioritize from the transcript…" maxlength="8000"></textarea>
     </div>
+
+    <!-- Caption templates -->
+    <div class="sec-label">Caption Templates</div>
+    <div class="tmpl-tabs">
+      <button class="tmpl-tab active">Trending</button>
+      <button class="tmpl-tab" onclick="swTab(this)">My templates</button>
+      <button class="tmpl-tab" onclick="swTab(this)">Brand kit ✦</button>
+    </div>
+    <div class="style-grid" id="style-grid"></div>
+
+    <!-- Enhancements -->
+    <div class="sec-label">Enhancements</div>
+    <div class="enhance-grid">
+      <div class="enh-card on" onclick="this.classList.toggle('on')">
+        <div class="enh-top"><span class="enh-icon">😄</span><div class="enh-toggle"></div></div>
+        <div class="enh-title">Add emoji</div><div class="enh-sub">Auto-place reactions</div>
+      </div>
+      <div class="enh-card on" onclick="this.classList.toggle('on')">
+        <div class="enh-top"><span class="enh-icon">🔥</span><div class="enh-toggle"></div></div>
+        <div class="enh-title">Highlight keywords</div><div class="enh-sub">Emphasize key words</div>
+      </div>
+      <div class="enh-card" onclick="this.classList.toggle('on')">
+        <div class="enh-top"><span class="enh-icon">✂️</span><div class="enh-toggle"></div></div>
+        <div class="enh-title">Remove silences</div><div class="enh-sub">Trim dead air</div>
+      </div>
+      <div class="enh-card" onclick="this.classList.toggle('on')">
+        <div class="enh-top"><span class="enh-icon">🎬</span><div class="enh-toggle"></div></div>
+        <div class="enh-title">Add B-roll ✦</div><div class="enh-sub">Auto insert footage</div>
+      </div>
+    </div>
+
+    <div class="cta-row">
+      <button class="btn-back-s" onclick="goTo(1)">← Back</button>
+      <button class="btn-generate" onclick="goTo(3)">✦ Generate clips</button>
+    </div>
   </div>
 
-  <!-- CTA -->
-  <div class="cta-row">
-    <button class="btn-back" onclick="goTo(1)">← Back</button>
-    <button class="btn-generate" onclick="goTo(3)">
-      <span class="spark">✦</span> Generate clips
-    </button>
-  </div>
-</div>
-
-<!-- ══════════ SCREEN 3: EDITOR ══════════ -->
-<div id="screen-editor" class="screen">
-
-  <!-- Editor top bar -->
-  <div class="editor-topbar">
-    <div class="editor-tools">
-      <button class="tool-btn" title="Undo">↩</button>
-      <button class="tool-btn" title="Redo">↪</button>
-      <button class="tool-btn" title="Refresh">↻</button>
-    </div>
-
-    <div class="editor-title">
-      My YouTube Video &nbsp;
-      <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-    </div>
-
-    <div class="editor-actions">
-      <button class="btn-back" onclick="goTo(2)" style="padding:8px 16px;font-size:13px;">← Restyle</button>
-      <button class="btn-export">⬇ Export clips</button>
-    </div>
-  </div>
-
-  <!-- Editor body -->
-  <div class="editor-body">
-
-    <!-- LEFT: Transcript -->
-    <div class="editor-left">
-      <div class="panel-tabs">
-        <button class="panel-tab active">Transcript</button>
-        <button class="panel-tab" onclick="this.parentElement.querySelectorAll('.panel-tab').forEach(t=>t.classList.remove('active'));this.classList.add('active')">Subtitles</button>
+  <!-- ══ SCREEN 3: EDITOR ══ -->
+  <div id="screen-editor" class="screen">
+    <div class="editor-topbar">
+      <div class="ed-tools">
+        <button class="ed-tool">↩</button>
+        <button class="ed-tool">↪</button>
+        <button class="ed-tool">↻</button>
       </div>
-      <div class="panel-search">
-        <input type="text" placeholder="🔍  Search transcript…" />
-      </div>
-      <div class="transcript-list">
-        <div class="transcript-block active">
-          <div class="ts">0:00</div>
-          AI is not making you dumber. How you are using AI is making you dumber.
-        </div>
-        <div class="transcript-block">
-          <div class="ts">0:06</div>
-          In June of this year, 2025, this study from MIT went viral.
-        </div>
-        <div class="transcript-block">
-          <div class="ts">0:12</div>
-          They took basically 50 students, all from elite colleges in Massachusetts,
-        </div>
-        <div class="transcript-block">
-          <div class="ts">0:20</div>
-          split them up into three groups, and asked them to all write essays.
-        </div>
-        <div class="transcript-block">
-          <div class="ts">0:27</div>
-          Group one used ChatGPT. Group two used a basic search engine.
-        </div>
-        <div class="transcript-block">
-          <div class="ts">0:34</div>
-          Group three had no AI access at all. The results were shocking.
-        </div>
-        <div class="transcript-block">
-          <div class="ts">0:42</div>
-          The students who used ChatGPT scored the lowest on retention tests.
-        </div>
+      <div class="ed-title">My YouTube Video <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+      <div class="ed-actions">
+        <button class="btn-restyle" onclick="goTo(2)">← Restyle</button>
+        <button class="btn-export">⬇ Export clips</button>
       </div>
     </div>
 
-    <!-- CENTER: Preview -->
-    <div class="editor-center">
-
-      <!-- Phone preview -->
-      <div class="phone-frame">
-        <div class="phone-video" id="phone-video">
-          <div class="phone-person">👩</div>
-          <div class="phone-caption-area">
-            <span class="phone-caption" id="phone-caption" style="background:#FACC15;color:#000;padding:3px 8px;border-radius:3px;">
-              AI IS NOT<br>MAKING YOU DUMBER
-            </span>
-          </div>
-          <div class="phone-controls">
-            <button class="play-btn">▶</button>
-            <div class="progress-bar-wrap"><div class="progress-bar-fill"></div></div>
-            <span style="font-size:10px;color:rgba(255,255,255,.6);">0:15</span>
-          </div>
+    <div class="editor-body">
+      <!-- LEFT -->
+      <div class="ed-left">
+        <div class="panel-tabs">
+          <button class="panel-tab active">Transcript</button>
+          <button class="panel-tab" onclick="swPanelTab(this)">Subtitles</button>
+        </div>
+        <div class="panel-search"><input type="text" placeholder="🔍  Search transcript…" /></div>
+        <div class="transcript-list">
+          <div class="tx-block act"><div class="tx-time">0:00</div>AI is not making you dumber. How you are using AI is making you dumber.</div>
+          <div class="tx-block"><div class="tx-time">0:06</div>In June of this year, 2025, this study from MIT went viral.</div>
+          <div class="tx-block"><div class="tx-time">0:12</div>They took basically 50 students, all from elite colleges in Massachusetts,</div>
+          <div class="tx-block"><div class="tx-time">0:20</div>split them up into three groups, and asked them to all write essays.</div>
+          <div class="tx-block"><div class="tx-time">0:27</div>Group one used ChatGPT. Group two used a basic search engine.</div>
+          <div class="tx-block"><div class="tx-time">0:34</div>Group three had no AI access at all. The results were shocking.</div>
+          <div class="tx-block"><div class="tx-time">0:42</div>The students who used ChatGPT scored the lowest on retention tests.</div>
         </div>
       </div>
 
-      <!-- Playback -->
-      <div class="playback-controls">
-        <div class="pb-row1">
-          <button class="pb-btn">⏮</button>
-          <button class="pb-btn">⏪</button>
-          <button class="pb-btn primary">▶</button>
-          <button class="pb-btn">⏩</button>
-          <button class="pb-btn">⏭</button>
+      <!-- CENTER -->
+      <div class="ed-center">
+        <div class="phone-frame">
+          <div class="phone-inner">
+            <div class="phone-person">👩</div>
+            <div class="phone-cap-area">
+              <span class="phone-cap">AI IS NOT<br>MAKING YOU DUMBER</span>
+            </div>
+            <div class="phone-prog">
+              <button class="ph-play">▶</button>
+              <div class="ph-bar"><div class="ph-fill"></div></div>
+              <span class="ph-time">0:15</span>
+            </div>
+          </div>
         </div>
-        <div class="pb-timeline"><div class="pb-fill"></div></div>
-        <div class="pb-times"><span>0:00.0</span><span>0:15.1</span></div>
+
+        <div class="pb-box">
+          <div class="pb-btns">
+            <button class="pb-btn">⏮</button>
+            <button class="pb-btn">⏪</button>
+            <button class="pb-btn pri">▶</button>
+            <button class="pb-btn">⏩</button>
+            <button class="pb-btn">⏭</button>
+          </div>
+          <div class="pb-line"><div class="pb-prog"></div></div>
+          <div class="pb-times"><span>0:00.0</span><span>0:15.1</span></div>
+        </div>
+
       </div>
 
-      <!-- Clip strip -->
-      <div class="clip-strip">
-        <div class="clip-strip-label">AI-generated clips</div>
-        <div class="clips-row">
-          <div class="clip-thumb active" style="background:linear-gradient(135deg,#1a1a2e,#0f3460);">
-            <div class="clip-num">#1</div>👩<div class="clip-dur">0:15</div>
+      <!-- RIGHT -->
+
+
+      <!-- RIGHT -->
+      <div class="ed-right">
+
+        <div class="r-tabs">
+          <button class="r-tab active">Presets</button>
+          <button class="r-tab" onclick="swRightTab(this)">Settings</button>
+        </div>
+        <div class="r-body" id="r-presets">
+          <div class="r-sec">
+            <div class="r-sec-title">Animated</div>
+            <div class="mini-grid" id="mini-animated"></div>
           </div>
-          <div class="clip-thumb" style="background:linear-gradient(135deg,#2d3748,#1a202c);">
-            <div class="clip-num">#2</div>🧠<div class="clip-dur">0:42</div>
+          <div class="r-sec">
+            <div class="r-sec-title">Simple</div>
+            <div class="mini-grid" id="mini-simple"></div>
           </div>
-          <div class="clip-thumb" style="background:linear-gradient(135deg,#3d2c1e,#1a0a00);">
-            <div class="clip-num">#3</div>📊<div class="clip-dur">0:31</div>
+        </div>
+        <div class="r-body" id="r-settings" style="display:none">
+          <div class="r-sec">
+            <div class="r-sec-title">Font</div>
+            <div class="font-opts">
+              <div class="font-opt sel" style="font-family:Arial" onclick="selFont(this)">Arial</div>
+              <div class="font-opt" style="font-family:'Arial Black';font-weight:900" onclick="selFont(this)">Arial Black</div>
+              <div class="font-opt" style="font-family:Helvetica" onclick="selFont(this)">Helvetica</div>
+              <div class="font-opt" style="font-family:Impact;letter-spacing:1px" onclick="selFont(this)">Impact</div>
+              <div class="font-opt" style="font-family:Georgia" onclick="selFont(this)">Georgia</div>
+            </div>
           </div>
-          <div class="clip-thumb" style="background:linear-gradient(135deg,#1e3a5f,#0d1f3c);">
-            <div class="clip-num">#4</div>💡<div class="clip-dur">0:58</div>
+          <div class="r-sec">
+            <div class="r-sec-title">Caption color</div>
+            <div class="swatches">
+              <div class="sw sel" style="background:#FACC15" onclick="selSw(this)"></div>
+              <div class="sw" style="background:#ffffff;border:1px solid var(--border)" onclick="selSw(this)"></div>
+              <div class="sw" style="background:#00FFFF" onclick="selSw(this)"></div>
+              <div class="sw" style="background:#F97316" onclick="selSw(this)"></div>
+              <div class="sw" style="background:#EC4899" onclick="selSw(this)"></div>
+              <div class="sw" style="background:#22C55E" onclick="selSw(this)"></div>
+              <div class="sw" style="background:#3B82F6" onclick="selSw(this)"></div>
+              <div class="sw" style="background:#A855F7" onclick="selSw(this)"></div>
+            </div>
           </div>
-          <div class="clip-thumb" style="background:linear-gradient(135deg,#4c1d95,#1e1b4b);">
-            <div class="clip-num">#5</div>🎯<div class="clip-dur">0:22</div>
-          </div>
-          <div class="clip-thumb" style="background:linear-gradient(135deg,#1a2a1e,#0a1a0e);" onclick="this.closest('.clips-row').querySelector('.add-clip')?.click()">
-            <span style="font-size:16px;color:rgba(255,255,255,.4);">+</span>
+          <div class="r-sec">
+            <div class="r-sec-title">Options</div>
+            <div class="tog-row"><span class="tog-label">Emoji overlay</span><div class="tog on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="tog-row"><span class="tog-label">Highlight keywords</span><div class="tog on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="tog-row"><span class="tog-label">Remove silences</span><div class="tog" onclick="this.classList.toggle('on')"></div></div>
+            <div class="tog-row"><span class="tog-label">Show hook title</span><div class="tog" onclick="this.classList.toggle('on')"></div></div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- RIGHT: Style controls -->
-    <div class="editor-right">
-      <div class="right-tabs">
-        <button class="right-tab active">Presets</button>
-        <button class="right-tab" onclick="switchRightTab(this)">Settings</button>
+    <!-- ══ TIMELINE ══ -->
+    <div class="timeline-panel">
+      <!-- Toolbar -->
+      <div class="timeline-toolbar">
+        <span class="tl-hide">Hide timeline</span>
+        <div class="tl-sep"></div>
+        <button class="tl-btn" title="Split">⊢</button>
+        <button class="tl-btn" title="Delete">🗑</button>
+        <button class="tl-btn active" title="Subtitle track">⬛</button>
+        <div class="tl-sep"></div>
+        <div class="tl-time">
+          <button class="tl-btn" style="width:24px;height:24px;font-size:11px;">⏮</button>
+          <button class="tl-btn" style="width:28px;height:28px;font-size:13px;">▶</button>
+          <button class="tl-btn" style="width:24px;height:24px;font-size:11px;">⏭</button>
+          <span style="margin-left:8px;">00:00.00</span>
+          <span class="slash">/</span>
+          <span class="total">01:08.04</span>
+        </div>
+        <div class="tl-zoom">
+          <span class="tl-zoom-icon">🔍−</span>
+          <div class="tl-zoom-track"><div class="tl-zoom-thumb"></div></div>
+          <span class="tl-zoom-icon">+</span>
+        </div>
       </div>
-      <div class="right-content" id="right-presets">
 
-        <div class="right-section">
-          <div class="right-section-title">Animated</div>
-          <div class="mini-style-grid" id="mini-grid"></div>
+      <!-- Track area -->
+      <div class="timeline-body">
+        <div class="tl-side">
+          <button class="tl-add-btn">+</button>
         </div>
-
-        <div class="right-section">
-          <div class="right-section-title">Simple</div>
-          <div class="mini-style-grid" id="mini-grid-simple"></div>
-        </div>
-
-      </div>
-      <div class="right-content" id="right-settings" style="display:none;">
-
-        <div class="right-section">
-          <div class="right-section-title">Font</div>
-          <div class="font-grid">
-            <div class="font-option selected" style="font-family:Arial,sans-serif;" onclick="selectFont(this)">Arial</div>
-            <div class="font-option" style="font-family:'Arial Black',sans-serif;font-weight:900;" onclick="selectFont(this)">Arial Black</div>
-            <div class="font-option" style="font-family:Helvetica,sans-serif;" onclick="selectFont(this)">Helvetica</div>
-            <div class="font-option" style="font-family:Impact,sans-serif;letter-spacing:1px;" onclick="selectFont(this)">Impact</div>
-            <div class="font-option" style="font-family:Georgia,serif;" onclick="selectFont(this)">Georgia</div>
+        <div class="tl-tracks" id="tl-tracks">
+          <!-- Ruler -->
+          <div class="tl-ruler" id="tl-ruler"></div>
+          <!-- Video filmstrip track -->
+          <div class="tl-video-track" id="tl-filmstrip">
+            <div class="tl-playhead"></div>
+          </div>
+          <!-- Waveform track -->
+          <div class="tl-waveform">
+            <svg class="waveform-svg" id="waveform-svg" preserveAspectRatio="none"></svg>
           </div>
         </div>
-
-        <div class="right-section">
-          <div class="right-section-title">Caption color</div>
-          <div class="color-row">
-            <div class="swatch selected" style="background:#FACC15" onclick="selectSwatch(this)"></div>
-            <div class="swatch" style="background:#ffffff" onclick="selectSwatch(this)"></div>
-            <div class="swatch" style="background:#00FFFF" onclick="selectSwatch(this)"></div>
-            <div class="swatch" style="background:#F97316" onclick="selectSwatch(this)"></div>
-            <div class="swatch" style="background:#EC4899" onclick="selectSwatch(this)"></div>
-            <div class="swatch" style="background:#22C55E" onclick="selectSwatch(this)"></div>
-            <div class="swatch" style="background:#3B82F6" onclick="selectSwatch(this)"></div>
-            <div class="swatch" style="background:#A855F7" onclick="selectSwatch(this)"></div>
-          </div>
-        </div>
-
-        <div class="right-section">
-          <div class="right-section-title">Options</div>
-          <div class="toggle-row">
-            <span class="toggle-row-label">Emoji overlay</span>
-            <div class="mini-toggle on" onclick="this.classList.toggle('on')"></div>
-          </div>
-          <div class="toggle-row">
-            <span class="toggle-row-label">Highlight keywords</span>
-            <div class="mini-toggle on" onclick="this.classList.toggle('on')"></div>
-          </div>
-          <div class="toggle-row">
-            <span class="toggle-row-label">Remove silences</span>
-            <div class="mini-toggle" onclick="this.classList.toggle('on')"></div>
-          </div>
-          <div class="toggle-row">
-            <span class="toggle-row-label">Show hook title</span>
-            <div class="mini-toggle" onclick="this.classList.toggle('on')"></div>
-          </div>
-        </div>
-
       </div>
     </div>
 
   </div>
+
 </div>
 
 <script>
-// ── Screen navigation ──
-const screens = { 1: 'screen-upload', 2: 'screen-style', 3: 'screen-editor' };
-const navItems = { 1: 'nav-1', 2: 'nav-2', 3: 'nav-3' };
-let currentScreen = 1;
+// ── Navigation ──
+let cur = 1;
+const SCREENS = {1:'screen-upload',2:'screen-style',3:'screen-editor'};
+const PILLS   = {1:'sp1',2:'sp2',3:'sp3'};
+const TITLES  = {1:'New clip',2:'New clip — Choose style',3:'New clip — Editor'};
 
 function goTo(n) {
-  document.getElementById(screens[currentScreen]).classList.remove('active');
-  document.getElementById(navItems[currentScreen]).classList.remove('active');
-  if (currentScreen < n) document.getElementById(navItems[currentScreen]).classList.add('done');
-
-  currentScreen = n;
-  document.getElementById(screens[n]).classList.add('active');
-  document.getElementById(navItems[n]).classList.add('active');
-  // mark prior steps done
-  for (let i = 1; i < n; i++) {
-    document.getElementById(navItems[i]).classList.remove('active');
-    document.getElementById(navItems[i]).classList.add('done');
-    document.getElementById(navItems[i]).querySelector('.step-num').textContent = '✓';
+  document.getElementById(SCREENS[cur]).classList.remove('active');
+  document.getElementById(PILLS[cur]).classList.remove('active');
+  if (cur < n) {
+    const p = document.getElementById(PILLS[cur]);
+    p.classList.add('done');
+    p.querySelector('.step-dot').textContent = '✓';
   }
+  cur = n;
+  document.getElementById(SCREENS[n]).classList.add('active');
+  document.getElementById(PILLS[n]).classList.add('active');
+  document.getElementById(PILLS[n]).classList.remove('done');
+  document.getElementById('topbar-title').textContent = TITLES[n];
 }
 
-// ── Style cards data ──
+// ── Clip length dropdown ──
+const clipInfo = {
+  '30': { badge: '~8 clips', desc: 'Short punchy clips' },
+  '45': { badge: '~5 clips', desc: 'Standard length' },
+  '75': { badge: '~3 clips', desc: 'In-depth clips' },
+  '999': { badge: '~2 clips', desc: 'Long-form clips' },
+};
+function updateClipLength(sel) {
+  const info = clipInfo[sel.value];
+  document.getElementById('clip-len-badge').textContent = info.badge;
+}
+
+// ── 10 style templates ──
 const templates = [
-  { name: 'Mr. Beast', bg: 'bg-dark', cap: 'cap-karaoke', text: 'HERE\nIS YOUR', emoji: '🎮' },
-  { name: 'Business', bg: 'bg-blue', cap: 'cap-bold', text: 'Here is\nyour subtitle', emoji: '💼' },
-  { name: 'Blur', bg: 'bg-blur', cap: 'cap-box', text: 'Here is\nyour subtitle', emoji: '👩' },
-  { name: 'Fit video', bg: 'bg-dark', cap: 'cap-outline', text: 'Here is\nyour subtitle', emoji: '💪' },
-  { name: 'Tech', bg: 'bg-dark', cap: 'cap-neon', text: 'FIVE\nBOXING', emoji: '🖥️' },
-  { name: 'Gradient', bg: 'bg-purple', cap: 'cap-gradient', text: 'Five boxing\nwizard jump', emoji: '✨' },
+  { name:'Mr. Beast',   bg:'#0f0f0f',                                         capStyle:'background:#FACC15;color:#000',                                       text:'HERE\nIS YOUR',          emoji:'🎮' },
+  { name:'Business',    bg:'linear-gradient(135deg,#1e3a5f,#0d1f3c)',          capStyle:'background:#fff;color:#000;text-transform:uppercase',                 text:'Here is\nyour subtitle', emoji:'💼' },
+  { name:'Blur',        bg:'linear-gradient(180deg,#2D3748,#1a202c)',          capStyle:'background:rgba(0,0,0,.75);color:#fff',                               text:'Here is\nyour subtitle', emoji:'👩' },
+  { name:'Fit video',   bg:'#111',                                             capStyle:'color:#fff;text-shadow:-1px -1px 0 #000,1px 1px 0 #000',              text:'Here is\nyour subtitle', emoji:'💪' },
+  { name:'Tech',        bg:'#0a0a0a',                                          capStyle:'color:#0FF;text-shadow:0 0 8px #0FF',                                 text:'FIVE\nBOXING',           emoji:'🖥️' },
+  { name:'Gradient',    bg:'linear-gradient(135deg,#4c1d95,#1e1b4b)',          capStyle:'color:#F97316',                                                       text:'Five boxing\nwizard',    emoji:'✨' },
+  { name:'Podcast',     bg:'linear-gradient(135deg,#1a1a1a,#2d1f0e)',          capStyle:'background:#fff;color:#111;border-radius:2px;font-style:italic',      text:'"Quote style\ncaption"', emoji:'🎙️' },
+  { name:'Fire',        bg:'linear-gradient(180deg,#1a0a00,#3d1500)',          capStyle:'color:#FF4500;text-shadow:0 0 10px #FF4500',                          text:'FIRE\nCONTENT',          emoji:'🔥' },
+  { name:'Minimal',     bg:'#f8f8f8',                                          capStyle:'color:#111;font-weight:400;letter-spacing:1px',                       text:'Clean minimal\ncaption', emoji:'◻️' },
+  { name:'Pop',         bg:'linear-gradient(135deg,#ff006e,#8338ec)',          capStyle:'background:#fff;color:#ff006e;font-style:italic',                     text:'Pop style\ncaption',     emoji:'🌟' },
 ];
 
 const grid = document.getElementById('style-grid');
 templates.forEach((t, i) => {
-  const card = document.createElement('div');
-  card.className = 'style-card' + (i === 0 ? ' selected' : '');
-  card.innerHTML = `
-    <div class="card-face ${t.bg}">
-      <div class="card-person">${t.emoji}</div>
-      <div class="card-caption ${t.cap}">${t.text.replace('\n','<br>')}</div>
-    </div>
-    <div class="card-name">${t.name}</div>`;
-  card.onclick = () => {
-    document.querySelectorAll('.style-card').forEach(c => c.classList.remove('selected'));
-    card.classList.add('selected');
-    updatePreviewCaption(t);
+  const c = document.createElement('div');
+  c.className = 'style-card'+(i===0?' sel':'');
+  c.innerHTML = `
+    <div class="card-bg" style="background:${t.bg}">
+      <div class="card-avatar">${t.emoji}</div>
+      <div class="card-cap" style="${t.capStyle}">${t.text.replace('\n','<br>')}</div>
+      <div class="card-label">${t.name}</div>
+    </div>`;
+  c.onclick = () => {
+    document.querySelectorAll('.style-card').forEach(x=>x.classList.remove('sel'));
+    c.classList.add('sel');
   };
-  grid.appendChild(card);
+  grid.appendChild(c);
 });
 
-// ── Mini style grid (editor right panel) ──
-const miniTemplates = [
-  { bg: '#111', cap: 'cap-karaoke', text: 'HERE IS\nYOUR', col: '#FACC15' },
-  { bg: '#1a1a2e', cap: 'cap-bold', text: 'HERE IS YOUR\nSUBTITLE', col: '#fff' },
-  { bg: '#0f0f0f', cap: 'cap-neon', text: 'FIVE\nBOXING', col: '#0FF' },
-  { bg: '#4c1d95', cap: 'cap-gradient', text: 'Five boxing\nwizard', col: '#F97316' },
+// ── Mini grids ──
+const animatedItems = [
+  { bg:'#111',    style:'background:#FACC15;color:#000',        text:'HERE IS\nYOUR' },
+  { bg:'#1a1a2e', style:'color:#fff;text-transform:uppercase;font-weight:900', text:'HERE IS\nSUBTITLE' },
+  { bg:'#0a0a0a', style:'color:#0FF;text-shadow:0 0 6px #0FF', text:'FIVE\nBOXING' },
+  { bg:'#4c1d95', style:'color:#F97316',                        text:'Five boxing\nwizard' },
 ];
-const simpleTemplates = [
-  { bg: '#111', text: 'FIVE BOXING\nWIZARDS JUMP', col: '#fff', fw: '900' },
-  { bg: '#000', text: 'Five boxing\nwizards jump', col: '#ccc', fw: '400' },
-  { bg: '#1a1714', text: 'FIVE BOXING\nWIZARDS JUMP', col: '#FACC15', fw: '700' },
-  { bg: '#0f1117', text: 'Five boxing\nwizard jump', col: '#fff', fw: '600' },
+const simpleItems = [
+  { bg:'#111',    style:'color:#fff;font-weight:900',  text:'FIVE BOXING\nWIZARDS' },
+  { bg:'#000',    style:'color:#ccc;font-weight:400',  text:'Five boxing\nwizards jump' },
+  { bg:'#1a1714', style:'color:#FACC15;font-weight:700', text:'FIVE BOXING\nWIZARDS JUMP' },
+  { bg:'#0f1117', style:'color:#fff;font-weight:600',  text:'Five boxing\nwizard jump' },
 ];
-
-function buildMiniGrid(containerId, items) {
-  const c = document.getElementById(containerId);
-  items.forEach((t, i) => {
+function buildMini(id, items) {
+  const c = document.getElementById(id);
+  items.forEach((t,i) => {
     const card = document.createElement('div');
-    card.className = 'mini-card' + (i === 0 ? ' selected' : '');
+    card.className = 'mini-card'+(i===0?' sel':'');
     card.style.background = t.bg;
-    card.innerHTML = `<div class="mini-caption" style="color:${t.col};font-weight:${t.fw||'800'}">${t.text.replace('\n','<br>')}</div>`;
-    card.onclick = () => {
-      document.querySelectorAll('.mini-card').forEach(c => c.classList.remove('selected'));
-      card.classList.add('selected');
-    };
+    card.innerHTML = `<div class="mini-cap" style="${t.style}">${t.text.replace('\n','<br>')}</div>`;
+    card.onclick = () => { document.querySelectorAll('.mini-card').forEach(x=>x.classList.remove('sel')); card.classList.add('sel'); };
     c.appendChild(card);
   });
 }
-buildMiniGrid('mini-grid', miniTemplates);
-buildMiniGrid('mini-grid-simple', simpleTemplates);
+buildMini('mini-animated', animatedItems);
+buildMini('mini-simple', simpleItems);
 
-// ── Update phone preview ──
-function updatePreviewCaption(t) {
-  const el = document.getElementById('phone-caption');
-  el.className = 'phone-caption ' + t.cap;
-  el.innerHTML = t.text.replace('\n', '<br>');
-  const bgMap = {
-    'bg-dark': '#0f0f0f', 'bg-blur': '#2D3748',
-    'bg-warm': '#3d2c1e', 'bg-blue': '#1e3a5f',
-    'bg-split': '#fff', 'bg-purple': '#4c1d95'
-  };
-  document.getElementById('phone-video').style.background = bgMap[t.bg] || '#111';
+// ── UI helpers ──
+function swSourceTab(el) { el.closest('.source-tabs').querySelectorAll('.source-tab').forEach(t=>t.classList.remove('active')); el.classList.add('active'); }
+function swTab(el) { el.closest('.tmpl-tabs').querySelectorAll('.tmpl-tab').forEach(t=>t.classList.remove('active')); el.classList.add('active'); }
+function swPanelTab(el) { el.closest('.panel-tabs').querySelectorAll('.panel-tab').forEach(t=>t.classList.remove('active')); el.classList.add('active'); }
+function swRightTab(el) {
+  el.closest('.r-tabs').querySelectorAll('.r-tab').forEach(t=>t.classList.remove('active')); el.classList.add('active');
+  const isS = el.textContent==='Settings';
+  document.getElementById('r-presets').style.display = isS?'none':'block';
+  document.getElementById('r-settings').style.display = isS?'block':'none';
 }
+function selFont(el) { document.querySelectorAll('.font-opt').forEach(f=>f.classList.remove('sel')); el.classList.add('sel'); }
+function selSw(el) { document.querySelectorAll('.sw').forEach(s=>s.classList.remove('sel')); el.classList.add('sel'); }
+document.querySelectorAll('.tx-block').forEach(b=>b.addEventListener('click',()=>{ document.querySelectorAll('.tx-block').forEach(x=>x.classList.remove('act')); b.classList.add('act'); }));
+document.querySelectorAll('.clip-th').forEach(b=>b.addEventListener('click',()=>{ document.querySelectorAll('.clip-th').forEach(x=>x.classList.remove('act')); b.classList.add('act'); }));
 
-// ── Right panel tab switch ──
-function switchRightTab(tab) {
-  document.querySelectorAll('.right-tab').forEach(t => t.classList.remove('active'));
-  tab.classList.add('active');
-  const isSettings = tab.textContent === 'Settings';
-  document.getElementById('right-presets').style.display = isSettings ? 'none' : 'block';
-  document.getElementById('right-settings').style.display = isSettings ? 'block' : 'none';
-}
+// ── Timeline ──
+(function buildTimeline() {
+  // Ruler ticks
+  const ruler = document.getElementById('tl-ruler');
+  const totalSecs = 68;
+  const pxPerSec = 14;
+  const totalW = totalSecs * pxPerSec;
+  ruler.style.width = totalW + 'px';
+  for (let s = 0; s <= totalSecs; s += 5) {
+    const tick = document.createElement('div');
+    tick.className = 'tl-tick';
+    tick.style.left = (s * pxPerSec) + 'px';
+    tick.textContent = s;
+    ruler.appendChild(tick);
+  }
 
-// ── Font / swatch helpers ──
-function selectFont(el) {
-  document.querySelectorAll('.font-option').forEach(f => f.classList.remove('selected'));
-  el.classList.add('selected');
-}
-function selectSwatch(el) {
-  document.querySelectorAll('.swatch').forEach(s => s.classList.remove('selected'));
-  el.classList.add('selected');
-}
-
-// ── Transcript click ──
-document.querySelectorAll('.transcript-block').forEach(b => {
-  b.addEventListener('click', () => {
-    document.querySelectorAll('.transcript-block').forEach(x => x.classList.remove('active'));
-    b.classList.add('active');
+  // Filmstrip
+  const strip = document.getElementById('tl-filmstrip');
+  strip.style.width = totalW + 'px';
+  // Segment labels (mimicking "Fit" / "Fill" labels from the reference)
+  const labels = ['Fit','Fill','Fill','Fit','Fit','Fill','Fit','Fit','Fill','Fit','Fill','Fit','Fill','Fill'];
+  const frameEmojis = ['👩','🧠','📊','👩','💡','🎯','👩','🧠','📊','👩','💡','🎯','👩','🧠'];
+  const segW = Math.floor(totalW / labels.length);
+  labels.forEach((label, i) => {
+    const seg = document.createElement('div');
+    seg.className = 'tl-clip-segment';
+    seg.style.left = (i * segW + 2) + 'px';
+    seg.style.width = (segW - 3) + 'px';
+    // Alternating dark backgrounds
+    const hues = ['#1a2a3a','#1e1e2e','#2a1a1a','#1a2a1a','#2a2a1a','#1a1a2e'];
+    seg.style.background = hues[i % hues.length];
+    // filmstrip frames inside
+    const frameCount = Math.max(1, Math.floor(segW / 32));
+    const filmstrip = document.createElement('div');
+    filmstrip.className = 'filmstrip';
+    for (let f = 0; f < frameCount; f++) {
+      const frame = document.createElement('div');
+      frame.className = 'film-frame';
+      frame.style.width = Math.floor((segW-3)/frameCount) + 'px';
+      // Slight color variation per frame
+      const brightness = 0.7 + Math.random() * 0.4;
+      frame.style.background = `rgba(255,255,255,${brightness * 0.05})`;
+      frame.style.fontSize = '14px';
+      frame.textContent = frameEmojis[(i + f) % frameEmojis.length];
+      filmstrip.appendChild(frame);
+    }
+    seg.appendChild(filmstrip);
+    const lbl = document.createElement('div');
+    lbl.className = 'tl-clip-label';
+    lbl.textContent = label;
+    seg.appendChild(lbl);
+    strip.appendChild(seg);
   });
-});
+
+  // Waveform SVG
+  const wsvg = document.getElementById('waveform-svg');
+  wsvg.style.width = totalW + 'px';
+  wsvg.setAttribute('viewBox', `0 0 ${totalW} 46`);
+  let path = `M0 23`;
+  const bars = totalW / 3;
+  for (let i = 0; i <= bars; i++) {
+    const x = i * 3;
+    const amp = (Math.random() * 0.8 + 0.1) * 18;
+    path += ` L${x} ${23 - amp} L${x + 1.2} ${23 + amp}`;
+  }
+  path += ` L${totalW} 23`;
+  const pathEl = document.createElementNS('http://www.w3.org/2000/svg','path');
+  pathEl.setAttribute('d', path);
+  pathEl.setAttribute('fill', 'rgba(200,168,75,0.35)');
+  pathEl.setAttribute('stroke', 'rgba(200,168,75,0.6)');
+  pathEl.setAttribute('stroke-width', '0.5');
+  wsvg.appendChild(pathEl);
+
+  // Make tl-tracks container scroll
+  const tracks = document.getElementById('tl-tracks');
+  tracks.style.overflowX = 'auto';
+})();
 </script>
 </body>
 </html>
