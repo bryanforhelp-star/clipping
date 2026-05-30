@@ -274,8 +274,11 @@
   .tx-time { font-size: 10px; color: var(--muted); font-weight: 700; margin-bottom: 2px; }
 
   /* CENTER */
-  .ed-center { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 20px; background: var(--bg); overflow-y: auto; gap: 14px; }
-  .phone-frame { width: 210px; background: #0f0f0f; border-radius: 28px; overflow: hidden; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,.28); border: 5px solid #1a1a1a; aspect-ratio: 9/16; flex-shrink: 0; }
+  .ed-center { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 16px; background: var(--bg); overflow: hidden; gap: 12px; }
+  .phone-frame { background: #0f0f0f; border-radius: 24px; overflow: hidden; position: relative; box-shadow: 0 16px 40px rgba(0,0,0,.28); border: 5px solid #1a1a1a; flex-shrink: 0;
+    /* Size to fit available space */
+    height: calc(100% - 100px); max-height: 340px; aspect-ratio: 9/16;
+  }
   .phone-inner { width: 100%; height: 100%; position: relative; background: linear-gradient(180deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%); display: flex; align-items: center; justify-content: center; }
   .phone-person { font-size: 52px; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-55%); }
   .phone-cap-area { position: absolute; bottom: 52px; left: 0; right: 0; text-align: center; padding: 0 14px; }
@@ -286,16 +289,22 @@
   .ph-fill { width: 35%; height: 100%; background: var(--accent); border-radius: 1px; }
   .ph-time { font-size: 9px; color: rgba(255,255,255,.5); }
 
-  /* playback */
-  .pb-box { width: 100%; max-width: 400px; background: var(--surface); border-radius: 12px; padding: 12px 16px; border: 1px solid var(--border); }
-  .pb-btns { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 10px; }
-  .pb-btn { width: 32px; height: 32px; border-radius: 50%; border: none; background: var(--bg); cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; transition: background .15s; }
-  .pb-btn:hover { background: var(--border); }
-  .pb-btn.pri { width: 40px; height: 40px; background: var(--text); color: #fff; font-size: 14px; }
-  .pb-line { height: 3px; background: var(--border); border-radius: 2px; margin-bottom: 5px; position: relative; cursor: pointer; }
-  .pb-prog { height: 100%; width: 35%; background: var(--accent); border-radius: 2px; }
-  .pb-prog::after { content: ''; position: absolute; right: -5px; top: -4px; width: 11px; height: 11px; border-radius: 50%; background: var(--accent); }
-  .pb-times { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); }
+  /* video options bar */
+  .video-options-bar {
+    display: flex; align-items: center;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 0 4px; flex-shrink: 0;
+  }
+  .vob-item {
+    display: flex; align-items: center; gap: 6px;
+    padding: 9px 12px; font-size: 12px; font-weight: 600;
+    cursor: pointer; transition: color .12s; color: var(--text);
+    white-space: nowrap;
+  }
+  .vob-item:hover { color: var(--accent); }
+  .vob-icon { font-size: 15px; color: var(--text); }
+  .vob-swatch { width: 14px; height: 14px; border-radius: 3px; background: #111; display: inline-block; flex-shrink: 0; }
+  .vob-sep { width: 1px; height: 18px; background: var(--border); flex-shrink: 0; }
 
   /* clip strip — BIGGER thumbnails */
   .clip-strip { width: 100%; max-width: 600px; }
@@ -315,104 +324,111 @@
 
   /* ── TIMELINE ── */
   .timeline-panel {
-    flex-shrink: 0; background: #111; border-top: 1px solid #2a2a2a;
-    display: flex; flex-direction: column; height: 180px;
+    flex-shrink: 0; background: #fff; border-top: 1px solid var(--border);
+    display: flex; flex-direction: column; height: 172px;
     font-family: 'Inter', sans-serif;
   }
   .timeline-toolbar {
-    display: flex; align-items: center; padding: 0 16px; height: 38px;
-    border-bottom: 1px solid #2a2a2a; gap: 8px; flex-shrink: 0;
+    display: flex; align-items: center; padding: 0 12px; height: 36px;
+    border-bottom: 1px solid var(--border); gap: 6px; flex-shrink: 0;
+    background: #fff;
   }
   .tl-btn {
-    width: 28px; height: 28px; border-radius: 6px; border: none;
-    background: rgba(255,255,255,.08); color: rgba(255,255,255,.7);
-    font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px; border-radius: 6px; border: none;
+    background: var(--bg); color: var(--muted);
+    font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center;
     transition: background .15s;
   }
-  .tl-btn:hover { background: rgba(255,255,255,.15); }
-  .tl-btn.active { background: rgba(200,168,75,.3); color: var(--accent); }
-  .tl-hide { font-size: 11px; color: rgba(255,255,255,.4); cursor: pointer; margin-right: 4px; }
-  .tl-hide:hover { color: rgba(255,255,255,.7); }
-  .tl-sep { width: 1px; height: 18px; background: #2a2a2a; margin: 0 4px; }
+  .tl-btn:hover { background: var(--border); color: var(--text); }
+  .tl-btn.active { background: var(--accent-bg); color: var(--accent); }
+  .tl-hide { font-size: 11px; color: var(--muted); cursor: pointer; margin-right: 4px; display: flex; align-items: center; gap: 4px; }
+  .tl-hide:hover { color: var(--text); }
+  .tl-sep { width: 1px; height: 16px; background: var(--border); margin: 0 4px; }
   .tl-time {
-    margin: 0 auto; font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums;
-    color: #fff; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;
+    margin: 0 auto; font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums;
+    color: var(--text); letter-spacing: 0.5px; display: flex; align-items: center; gap: 5px;
   }
-  .tl-time .slash { color: rgba(255,255,255,.3); }
-  .tl-time .total { color: rgba(255,255,255,.4); font-weight: 500; }
-  .tl-zoom { display: flex; align-items: center; gap: 6px; margin-left: auto; }
-  .tl-zoom-icon { font-size: 12px; color: rgba(255,255,255,.4); }
-  .tl-zoom-track {
-    width: 80px; height: 3px; background: #333; border-radius: 2px; position: relative; cursor: pointer;
-  }
-  .tl-zoom-thumb {
-    position: absolute; width: 12px; height: 12px; border-radius: 50%;
-    background: #fff; top: -4px; left: 40%; cursor: grab;
-    box-shadow: 0 1px 4px rgba(0,0,0,.5);
-  }
+  .tl-time .slash { color: var(--muted); }
+  .tl-time .total { color: var(--muted); font-weight: 500; }
+  .tl-right-tools { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+  .tl-right-tools span { font-size: 11px; font-weight: 700; color: var(--muted); cursor: pointer; }
+  .tl-right-tools span:hover { color: var(--text); }
+  .tl-divider { width: 1px; height: 16px; background: var(--border); }
+  .tl-zoom { display: flex; align-items: center; gap: 5px; }
+  .tl-zoom-icon { font-size: 11px; color: var(--muted); }
+  .tl-zoom-track { width: 60px; height: 3px; background: var(--border); border-radius: 2px; position: relative; cursor: pointer; }
+  .tl-zoom-thumb { position: absolute; width: 10px; height: 10px; border-radius: 50%; background: var(--text); top: -3px; left: 40%; cursor: grab; }
 
   .timeline-body { flex: 1; display: flex; overflow: hidden; }
   .tl-side {
-    width: 44px; flex-shrink: 0; background: #0f0f0f;
-    border-right: 1px solid #2a2a2a;
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+    width: 36px; flex-shrink: 0; background: #fff;
+    border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+    padding-top: 24px; gap: 4px;
   }
   .tl-add-btn {
-    width: 26px; height: 26px; border-radius: 6px; border: 1px solid #333;
-    background: transparent; color: rgba(255,255,255,.5); font-size: 16px;
+    width: 22px; height: 22px; border-radius: 5px; border: 1px solid var(--border);
+    background: transparent; color: var(--muted); font-size: 14px;
     cursor: pointer; display: flex; align-items: center; justify-content: center;
     transition: all .15s;
   }
-  .tl-add-btn:hover { background: #222; color: #fff; }
+  .tl-add-btn:hover { background: var(--bg); color: var(--text); }
 
   .tl-tracks { flex: 1; overflow-x: auto; overflow-y: hidden; position: relative; }
   .tl-ruler {
-    height: 22px; background: #0f0f0f; border-bottom: 1px solid #2a2a2a;
-    display: flex; align-items: center; padding: 0 2px; position: relative; flex-shrink: 0;
+    height: 22px; background: #fff; border-bottom: 1px solid var(--border);
+    display: flex; align-items: flex-end; padding: 0 2px; position: relative; flex-shrink: 0;
   }
   .tl-tick {
-    position: absolute; display: flex; flex-direction: column; align-items: center;
-    font-size: 9px; color: rgba(255,255,255,.3); font-weight: 600;
+    position: absolute; display: flex; flex-direction: column; align-items: center; bottom: 0;
+    font-size: 9px; color: var(--muted); font-weight: 600; padding-bottom: 3px;
   }
-  .tl-tick::before { content: ''; width: 1px; height: 5px; background: rgba(255,255,255,.2); margin-bottom: 2px; }
-
-  .tl-video-track {
-    height: 68px; background: #1a1a1a; border-bottom: 1px solid #2a2a2a;
-    display: flex; position: relative; overflow: hidden;
-  }
-  .tl-clip-segment {
-    position: absolute; top: 4px; bottom: 4px; border-radius: 4px; overflow: hidden;
-    border: 1px solid rgba(255,255,255,.1);
-  }
-  .tl-clip-label {
-    position: absolute; top: 3px; left: 5px;
-    font-size: 9px; font-weight: 600; color: rgba(255,255,255,.6);
-    background: rgba(0,0,0,.3); padding: 1px 4px; border-radius: 2px;
-  }
-  .filmstrip {
-    width: 100%; height: 100%; display: flex; overflow: hidden;
-  }
-  .film-frame {
-    flex-shrink: 0; height: 100%; border-right: 1px solid rgba(0,0,0,.4);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 11px; overflow: hidden;
+  .tl-tick::before { content: ''; width: 1px; height: 4px; background: var(--border); margin-bottom: 2px; }
+  .tl-mini-tick {
+    position: absolute; bottom: 0; width: 1px; height: 3px; background: var(--border);
   }
 
+  /* Subtitle track */
+  .tl-subtitle-track {
+    height: 32px; background: #EDE9FB; border-bottom: 1px solid #D4C9F5;
+    display: flex; align-items: center; position: relative; overflow: hidden;
+  }
+  .tl-subtitle-label {
+    font-size: 11px; font-weight: 600; color: #7C5CBF; padding: 0 10px;
+    position: sticky; left: 0; background: linear-gradient(90deg, #EDE9FB 80%, transparent);
+    z-index: 2; white-space: nowrap;
+  }
+
+  /* Waveform track */
   .tl-waveform {
-    height: 46px; background: #111; position: relative; overflow: hidden;
+    height: 54px; background: #F7F5F0; border-bottom: 1px solid var(--border);
+    position: relative; overflow: hidden;
   }
   .waveform-svg { width: 100%; height: 100%; }
+  .tl-duration-badge {
+    position: absolute; left: 6px; bottom: 5px;
+    background: var(--text); color: #fff; font-size: 9px; font-weight: 700;
+    padding: 2px 5px; border-radius: 4px;
+  }
+
+  /* Add audio row */
+  .tl-add-audio {
+    height: 28px; background: #fff; display: flex; align-items: center;
+    padding: 0 10px; gap: 6px; font-size: 11px; font-weight: 600;
+    color: var(--muted); cursor: pointer; border-top: 1px solid var(--border);
+  }
+  .tl-add-audio:hover { color: var(--text); }
 
   /* Playhead */
   .tl-playhead {
-    position: absolute; top: 0; bottom: 0; width: 1px;
-    background: var(--accent); left: 8%;
+    position: absolute; top: 0; bottom: 0; width: 1.5px;
+    background: #333; left: 6%;
     pointer-events: none; z-index: 10;
   }
   .tl-playhead::before {
-    content: ''; position: absolute; top: -1px; left: -5px;
-    width: 11px; height: 11px; background: var(--accent); border-radius: 2px;
-    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    content: ''; position: absolute; top: 0; left: -4px;
+    border-left: 5px solid transparent; border-right: 5px solid transparent;
+    border-top: 8px solid #333;
   }
 
   /* RIGHT */
@@ -429,14 +445,77 @@
   .mini-card.sel { border-color: var(--accent); }
   .mini-card.sel::after { content: '✓'; position: absolute; top: 2px; right: 3px; font-size: 8px; color: var(--accent); font-weight: 800; }
   .mini-cap { font-size: 8px; font-weight: 800; text-align: center; padding: 0 3px; }
-  .font-opts { display: flex; flex-direction: column; gap: 5px; }
-  .font-opt { padding: 7px 10px; border-radius: 7px; border: 1.5px solid var(--border); cursor: pointer; font-size: 12px; transition: all .12s; font-family: inherit; }
-  .font-opt:hover { border-color: var(--accent); }
-  .font-opt.sel { border-color: var(--accent); background: var(--accent-bg); }
-  .swatches { display: flex; gap: 6px; flex-wrap: wrap; }
-  .sw { width: 24px; height: 24px; border-radius: 50%; cursor: pointer; transition: transform .12s; border: 2px solid transparent; }
-  .sw:hover { transform: scale(1.15); }
-  .sw.sel { border: 2.5px solid var(--text); }
+
+  /* ── SETTINGS PANEL (new design) ── */
+  .settings-apply-row {
+    display: flex; align-items: center; justify-content: flex-end; gap: 6px;
+    padding: 10px 14px 8px; border-bottom: 1px solid var(--border);
+    font-size: 12px; font-weight: 600; color: var(--text);
+  }
+  .apply-check {
+    width: 16px; height: 16px; border-radius: 4px;
+    background: var(--accent); display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 9px; cursor: pointer;
+  }
+  .settings-section { padding: 12px 14px; }
+  .font-row { display: flex; gap: 8px; margin-bottom: 10px; }
+  .font-select-box {
+    flex: 1; display: flex; align-items: center; justify-content: space-between;
+    background: var(--bg); border: 1.5px solid var(--border);
+    border-radius: 8px; padding: 8px 10px; cursor: pointer; font-size: 12px; font-weight: 700;
+  }
+  .font-select-box select { border: none; background: transparent; font-size: 12px; font-weight: 700; outline: none; cursor: pointer; font-family: inherit; color: var(--text); }
+  .size-select-box {
+    width: 64px; display: flex; align-items: center; justify-content: space-between;
+    background: var(--bg); border: 1.5px solid var(--border);
+    border-radius: 8px; padding: 8px 10px; cursor: pointer; font-size: 12px; font-weight: 700;
+  }
+  .size-select-box select { border: none; background: transparent; font-size: 12px; font-weight: 700; outline: none; cursor: pointer; font-family: inherit; color: var(--text); width: 32px; }
+  .format-row { display: flex; gap: 6px; margin-bottom: 8px; }
+  .fmt-group { display: flex; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .fmt-btn {
+    padding: 7px 9px; border: none; background: transparent;
+    font-size: 13px; cursor: pointer; color: var(--muted); transition: all .12s;
+    display: flex; align-items: center; justify-content: center; font-family: inherit;
+  }
+  .fmt-btn:hover { background: var(--border); color: var(--text); }
+  .fmt-btn.sel { background: var(--surface); color: var(--text); box-shadow: inset 0 0 0 1px var(--border); }
+  .fmt-btn + .fmt-btn { border-left: 1px solid var(--border); }
+  .style-row { display: flex; gap: 6px; margin-bottom: 6px; }
+  .style-btn {
+    padding: 7px 10px; border-radius: 8px; border: 1.5px solid var(--border);
+    background: var(--bg); font-size: 12px; cursor: pointer; color: var(--muted);
+    transition: all .12s; font-family: inherit; font-weight: 700;
+  }
+  .style-btn:hover { border-color: var(--text); color: var(--text); }
+  .style-btn.sel { background: var(--surface); border-color: var(--border); color: var(--text); }
+  .style-btn.color-dot {
+    width: 34px; height: 34px; border-radius: 50%; background: #111;
+    border: 2px solid var(--border); padding: 0;
+  }
+
+  .settings-divider { height: 1px; background: var(--border); margin: 0 14px; }
+  .settings-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 11px 14px; cursor: pointer; transition: background .12s;
+  }
+  .settings-row:hover { background: var(--bg); }
+  .settings-row-label { font-size: 13px; font-weight: 500; color: var(--text); }
+  .settings-row-right { display: flex; align-items: center; gap: 6px; }
+  .color-dot {
+    width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--border); cursor: pointer;
+    transition: transform .12s;
+  }
+  .color-dot:hover { transform: scale(1.1); }
+  .row-action { font-size: 18px; color: var(--muted); font-weight: 300; cursor: pointer; padding: 0 2px; }
+  .bg-shapes { display: flex; gap: 6px; padding: 6px 14px 12px; }
+  .bg-shape {
+    width: 34px; height: 28px; border-radius: 6px; border: 1.5px solid var(--border);
+    background: var(--bg); cursor: pointer; display: flex; align-items: center; justify-content: center;
+    font-size: 14px; transition: border-color .12s;
+  }
+  .bg-shape:hover, .bg-shape.sel { border-color: var(--text); background: var(--surface); }
+
   .tog-row { display: flex; align-items: center; justify-content: space-between; padding: 7px 0; }
   .tog-label { font-size: 12px; font-weight: 500; }
   .tog { width: 32px; height: 18px; border-radius: 9px; background: var(--border); position: relative; cursor: pointer; transition: background .15s; flex-shrink: 0; }
@@ -683,16 +762,15 @@
           </div>
         </div>
 
-        <div class="pb-box">
-          <div class="pb-btns">
-            <button class="pb-btn">⏮</button>
-            <button class="pb-btn">⏪</button>
-            <button class="pb-btn pri">▶</button>
-            <button class="pb-btn">⏩</button>
-            <button class="pb-btn">⏭</button>
-          </div>
-          <div class="pb-line"><div class="pb-prog"></div></div>
-          <div class="pb-times"><span>0:00.0</span><span>0:15.1</span></div>
+        <!-- Video options bar -->
+        <div class="video-options-bar">
+          <div class="vob-item"><span class="vob-icon">▭</span> Ratio (9:16)</div>
+          <div class="vob-sep"></div>
+          <div class="vob-item"><span class="vob-swatch"></span> Background</div>
+          <div class="vob-sep"></div>
+          <div class="vob-item"><span class="vob-icon">⊡</span> Layouts</div>
+          <div class="vob-sep"></div>
+          <div class="vob-item"><span class="vob-icon">⊙</span></div>
         </div>
 
       </div>
@@ -717,37 +795,98 @@
             <div class="mini-grid" id="mini-simple"></div>
           </div>
         </div>
-        <div class="r-body" id="r-settings" style="display:none">
-          <div class="r-sec">
-            <div class="r-sec-title">Font</div>
-            <div class="font-opts">
-              <div class="font-opt sel" style="font-family:Arial" onclick="selFont(this)">Arial</div>
-              <div class="font-opt" style="font-family:'Arial Black';font-weight:900" onclick="selFont(this)">Arial Black</div>
-              <div class="font-opt" style="font-family:Helvetica" onclick="selFont(this)">Helvetica</div>
-              <div class="font-opt" style="font-family:Impact;letter-spacing:1px" onclick="selFont(this)">Impact</div>
-              <div class="font-opt" style="font-family:Georgia" onclick="selFont(this)">Georgia</div>
+        <div class="r-body" id="r-settings" style="display:none; padding:0; overflow-y:auto;">
+
+          <!-- Apply to all -->
+          <div class="settings-apply-row">
+            <div class="apply-check">✓</div>
+            Apply to all
+          </div>
+
+          <!-- Font + size -->
+          <div class="settings-section">
+            <div class="font-row">
+              <div class="font-select-box">
+                <select>
+                  <option>TT Fors</option><option>Arial</option><option>Impact</option>
+                  <option>Helvetica</option><option>Georgia</option>
+                </select>
+                <span style="color:var(--muted);font-size:11px;">▾</span>
+              </div>
+              <div class="size-select-box">
+                <select><option>12</option><option>14</option><option>16</option><option>18</option><option>20</option><option>24</option></select>
+                <span style="color:var(--muted);font-size:11px;">▾</span>
+              </div>
+            </div>
+
+            <!-- Alignment -->
+            <div class="format-row">
+              <div class="fmt-group">
+                <button class="fmt-btn" onclick="selFmt(this)">≡</button>
+                <button class="fmt-btn sel" onclick="selFmt(this)">☰</button>
+                <button class="fmt-btn" onclick="selFmt(this)">≡</button>
+              </div>
+              <div class="fmt-group" style="margin-left:4px;">
+                <button class="fmt-btn" onclick="selFmt(this)"><b>B</b></button>
+                <button class="fmt-btn" onclick="selFmt(this)"><i>I</i></button>
+                <button class="fmt-btn" onclick="selFmt(this)" style="text-decoration:underline">U</button>
+              </div>
+            </div>
+
+            <!-- Aa / AB / color -->
+            <div class="style-row">
+              <button class="style-btn sel" onclick="selStyleBtn(this)">Aa</button>
+              <button class="style-btn" onclick="selStyleBtn(this)">AB</button>
+              <button class="style-btn color-dot" onclick="selStyleBtn(this)" style="background:#111;border-radius:50%;width:34px;height:34px;padding:0;border:2px solid var(--border);"></button>
             </div>
           </div>
-          <div class="r-sec">
-            <div class="r-sec-title">Caption color</div>
-            <div class="swatches">
-              <div class="sw sel" style="background:#FACC15" onclick="selSw(this)"></div>
-              <div class="sw" style="background:#ffffff;border:1px solid var(--border)" onclick="selSw(this)"></div>
-              <div class="sw" style="background:#00FFFF" onclick="selSw(this)"></div>
-              <div class="sw" style="background:#F97316" onclick="selSw(this)"></div>
-              <div class="sw" style="background:#EC4899" onclick="selSw(this)"></div>
-              <div class="sw" style="background:#22C55E" onclick="selSw(this)"></div>
-              <div class="sw" style="background:#3B82F6" onclick="selSw(this)"></div>
-              <div class="sw" style="background:#A855F7" onclick="selSw(this)"></div>
+
+          <div class="settings-divider"></div>
+
+          <!-- Shadow -->
+          <div class="settings-row" onclick="this.querySelector('.row-action').textContent=this.querySelector('.row-action').textContent==='+'?'−':'+'">
+            <span class="settings-row-label">Shadow</span>
+            <span class="row-action">+</span>
+          </div>
+          <div class="settings-divider"></div>
+
+          <!-- Stroke -->
+          <div class="settings-row" onclick="this.querySelector('.row-action').textContent=this.querySelector('.row-action').textContent==='+'?'−':'+'">
+            <span class="settings-row-label">Stroke</span>
+            <span class="row-action">+</span>
+          </div>
+          <div class="settings-divider"></div>
+
+          <!-- Highlight -->
+          <div class="settings-row">
+            <span class="settings-row-label">Highlight</span>
+            <div class="settings-row-right">
+              <div class="color-dot" style="background:#111" onclick="this.style.background=prompt('Hex color?',this.style.background)||this.style.background"></div>
+              <div class="color-dot" style="background:#333"></div>
+              <div class="color-dot" style="background:#555"></div>
+              <span class="row-action">−</span>
             </div>
           </div>
-          <div class="r-sec">
-            <div class="r-sec-title">Options</div>
-            <div class="tog-row"><span class="tog-label">Emoji overlay</span><div class="tog on" onclick="this.classList.toggle('on')"></div></div>
-            <div class="tog-row"><span class="tog-label">Highlight keywords</span><div class="tog on" onclick="this.classList.toggle('on')"></div></div>
-            <div class="tog-row"><span class="tog-label">Remove silences</span><div class="tog" onclick="this.classList.toggle('on')"></div></div>
-            <div class="tog-row"><span class="tog-label">Show hook title</span><div class="tog" onclick="this.classList.toggle('on')"></div></div>
+          <div class="settings-divider"></div>
+
+          <!-- Background -->
+          <div class="settings-row">
+            <span class="settings-row-label">Background</span>
+            <div class="settings-row-right">
+              <div class="color-dot" style="background:#E0E0E0; width:28px;height:28px;"></div>
+              <span class="row-action">−</span>
+            </div>
           </div>
+          <!-- Background shape options -->
+          <div class="bg-shapes">
+            <div class="bg-shape sel" onclick="selShape(this)" title="Rounded">╭</div>
+            <div class="bg-shape" onclick="selShape(this)" title="Square corner">⌐</div>
+            <div class="bg-shape" onclick="selShape(this)" title="Pill">▬</div>
+            <div class="bg-shape sel-always" onclick="selShape(this)" title="Full block" style="background:var(--text);border-color:var(--text);">
+              <span style="color:#fff;font-size:10px;">█</span>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -756,24 +895,30 @@
     <div class="timeline-panel">
       <!-- Toolbar -->
       <div class="timeline-toolbar">
-        <span class="tl-hide">Hide timeline</span>
+        <span class="tl-hide">▤ Hide timeline</span>
         <div class="tl-sep"></div>
         <button class="tl-btn" title="Split">⊢</button>
-        <button class="tl-btn" title="Delete">🗑</button>
-        <button class="tl-btn active" title="Subtitle track">⬛</button>
+        <button class="tl-btn" title="Delete">⊠</button>
+        <button class="tl-btn active" title="Captions">▤</button>
         <div class="tl-sep"></div>
         <div class="tl-time">
-          <button class="tl-btn" style="width:24px;height:24px;font-size:11px;">⏮</button>
-          <button class="tl-btn" style="width:28px;height:28px;font-size:13px;">▶</button>
-          <button class="tl-btn" style="width:24px;height:24px;font-size:11px;">⏭</button>
-          <span style="margin-left:8px;">00:00.00</span>
+          <button class="tl-btn">⏮</button>
+          <button class="tl-btn" style="background:var(--text);color:#fff;width:28px;height:28px;">▶</button>
+          <button class="tl-btn">⏭</button>
+          <span style="margin-left:6px;">00:00.00</span>
           <span class="slash">/</span>
           <span class="total">01:08.04</span>
         </div>
-        <div class="tl-zoom">
-          <span class="tl-zoom-icon">🔍−</span>
-          <div class="tl-zoom-track"><div class="tl-zoom-thumb"></div></div>
-          <span class="tl-zoom-icon">+</span>
+        <div class="tl-right-tools">
+          <div class="tl-btn" title="Split view">⧉</div>
+          <span>1x</span>
+          <div class="tl-divider"></div>
+          <div class="tl-btn" title="Fit">⊡</div>
+          <div class="tl-zoom">
+            <span class="tl-zoom-icon">−</span>
+            <div class="tl-zoom-track"><div class="tl-zoom-thumb"></div></div>
+            <span class="tl-zoom-icon">+</span>
+          </div>
         </div>
       </div>
 
@@ -783,16 +928,21 @@
           <button class="tl-add-btn">+</button>
         </div>
         <div class="tl-tracks" id="tl-tracks">
+          <!-- Playhead (spans all tracks) -->
+          <div class="tl-playhead"></div>
           <!-- Ruler -->
           <div class="tl-ruler" id="tl-ruler"></div>
-          <!-- Video filmstrip track -->
-          <div class="tl-video-track" id="tl-filmstrip">
-            <div class="tl-playhead"></div>
+          <!-- Subtitle track (purple) -->
+          <div class="tl-subtitle-track">
+            <span class="tl-subtitle-label">Subtitle</span>
           </div>
           <!-- Waveform track -->
           <div class="tl-waveform">
             <svg class="waveform-svg" id="waveform-svg" preserveAspectRatio="none"></svg>
+            <div class="tl-duration-badge">48.1s</div>
           </div>
+          <!-- Add audio -->
+          <div class="tl-add-audio">♫ Add audio</div>
         </div>
       </div>
     </div>
@@ -910,81 +1060,66 @@ document.querySelectorAll('.clip-th').forEach(b=>b.addEventListener('click',()=>
 
 // ── Timeline ──
 (function buildTimeline() {
-  // Ruler ticks
   const ruler = document.getElementById('tl-ruler');
   const totalSecs = 68;
-  const pxPerSec = 14;
+  const pxPerSec = 18;
   const totalW = totalSecs * pxPerSec;
-  ruler.style.width = totalW + 'px';
-  for (let s = 0; s <= totalSecs; s += 5) {
+
+  // Set track widths
+  ['tl-ruler','tl-tracks'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.minWidth = totalW + 'px';
+  });
+  ruler.style.minWidth = totalW + 'px';
+
+  // Major ticks every 5s, minor every 1s
+  for (let s = 0; s <= totalSecs; s++) {
+    const isMajor = s % 5 === 0;
     const tick = document.createElement('div');
-    tick.className = 'tl-tick';
+    tick.className = isMajor ? 'tl-tick' : 'tl-mini-tick';
     tick.style.left = (s * pxPerSec) + 'px';
-    tick.textContent = s;
+    if (isMajor) tick.textContent = s + 's';
     ruler.appendChild(tick);
   }
 
-  // Filmstrip
-  const strip = document.getElementById('tl-filmstrip');
-  strip.style.width = totalW + 'px';
-  // Segment labels (mimicking "Fit" / "Fill" labels from the reference)
-  const labels = ['Fit','Fill','Fill','Fit','Fit','Fill','Fit','Fit','Fill','Fit','Fill','Fit','Fill','Fill'];
-  const frameEmojis = ['👩','🧠','📊','👩','💡','🎯','👩','🧠','📊','👩','💡','🎯','👩','🧠'];
-  const segW = Math.floor(totalW / labels.length);
-  labels.forEach((label, i) => {
-    const seg = document.createElement('div');
-    seg.className = 'tl-clip-segment';
-    seg.style.left = (i * segW + 2) + 'px';
-    seg.style.width = (segW - 3) + 'px';
-    // Alternating dark backgrounds
-    const hues = ['#1a2a3a','#1e1e2e','#2a1a1a','#1a2a1a','#2a2a1a','#1a1a2e'];
-    seg.style.background = hues[i % hues.length];
-    // filmstrip frames inside
-    const frameCount = Math.max(1, Math.floor(segW / 32));
-    const filmstrip = document.createElement('div');
-    filmstrip.className = 'filmstrip';
-    for (let f = 0; f < frameCount; f++) {
-      const frame = document.createElement('div');
-      frame.className = 'film-frame';
-      frame.style.width = Math.floor((segW-3)/frameCount) + 'px';
-      // Slight color variation per frame
-      const brightness = 0.7 + Math.random() * 0.4;
-      frame.style.background = `rgba(255,255,255,${brightness * 0.05})`;
-      frame.style.fontSize = '14px';
-      frame.textContent = frameEmojis[(i + f) % frameEmojis.length];
-      filmstrip.appendChild(frame);
-    }
-    seg.appendChild(filmstrip);
-    const lbl = document.createElement('div');
-    lbl.className = 'tl-clip-label';
-    lbl.textContent = label;
-    seg.appendChild(lbl);
-    strip.appendChild(seg);
-  });
-
-  // Waveform SVG
+  // Waveform — dark spiky shapes like the reference
   const wsvg = document.getElementById('waveform-svg');
-  wsvg.style.width = totalW + 'px';
-  wsvg.setAttribute('viewBox', `0 0 ${totalW} 46`);
-  let path = `M0 23`;
-  const bars = totalW / 3;
-  for (let i = 0; i <= bars; i++) {
-    const x = i * 3;
-    const amp = (Math.random() * 0.8 + 0.1) * 18;
-    path += ` L${x} ${23 - amp} L${x + 1.2} ${23 + amp}`;
-  }
-  path += ` L${totalW} 23`;
-  const pathEl = document.createElementNS('http://www.w3.org/2000/svg','path');
-  pathEl.setAttribute('d', path);
-  pathEl.setAttribute('fill', 'rgba(200,168,75,0.35)');
-  pathEl.setAttribute('stroke', 'rgba(200,168,75,0.6)');
-  pathEl.setAttribute('stroke-width', '0.5');
-  wsvg.appendChild(pathEl);
+  const H = 54;
+  const mid = H / 2;
+  wsvg.style.minWidth = totalW + 'px';
+  wsvg.setAttribute('viewBox', `0 0 ${totalW} ${H}`);
+  wsvg.setAttribute('preserveAspectRatio', 'none');
 
-  // Make tl-tracks container scroll
-  const tracks = document.getElementById('tl-tracks');
-  tracks.style.overflowX = 'auto';
+  // Generate diamond-shaped spikes like the reference image
+  let d = '';
+  const step = 4;
+  for (let x = 0; x < totalW; x += step) {
+    const amp = (Math.random() * 0.85 + 0.05) * (mid - 4);
+    const w = step * 0.4;
+    // Diamond spike: pointy top and bottom
+    d += `M${x} ${mid} L${x + w} ${mid - amp} L${x + step * 0.5} ${mid} L${x + w} ${mid + amp} Z `;
+  }
+  const spikes = document.createElementNS('http://www.w3.org/2000/svg','path');
+  spikes.setAttribute('d', d);
+  spikes.setAttribute('fill', '#2d3561');
+  spikes.setAttribute('opacity', '0.75');
+  wsvg.appendChild(spikes);
+
+  // Subtle background fill
+  const bg = document.createElementNS('http://www.w3.org/2000/svg','rect');
+  bg.setAttribute('width', totalW); bg.setAttribute('height', H);
+  bg.setAttribute('fill', '#F0EEF8'); bg.setAttribute('rx', '0');
+  wsvg.insertBefore(bg, spikes);
+
+  // Make tracks scrollable
+  document.getElementById('tl-tracks').style.overflowX = 'auto';
+  document.getElementById('tl-tracks').style.overflowY = 'hidden';
 })();
+
+// ── Settings helpers ──
+function selFmt(el) { el.classList.toggle('sel'); }
+function selStyleBtn(el) { el.parentElement.querySelectorAll('.style-btn').forEach(b=>b.classList.remove('sel')); el.classList.add('sel'); }
+function selShape(el) { el.parentElement.querySelectorAll('.bg-shape').forEach(b=>b.classList.remove('sel')); el.classList.add('sel'); }
 </script>
 </body>
 </html>
