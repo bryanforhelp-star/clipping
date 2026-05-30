@@ -118,6 +118,7 @@
   .screen { display: none !important; }
   .screen.active { display: block !important; }
   #screen-editor.active { display: flex !important; flex-direction: column; }
+  #screen-clips.active { display: flex !important; flex-direction: column; }
   #screen-upload.active { display: flex !important; }
 
   /* ════════════ SCREEN 1 — UPLOAD ════════════ */
@@ -285,7 +286,36 @@
   .btn-generate { background: var(--text); color: #fff; border: none; border-radius: 10px; padding: 13px 28px; font-size: 14px; font-weight: 800; cursor: pointer; font-family: inherit; transition: opacity .15s; display: flex; align-items: center; gap: 7px; }
   .btn-generate:hover { opacity: .82; }
 
-  /* ════════════ SCREEN 3 — EDITOR ════════════ */
+
+  /* ════════════ SCREEN 3 — MY CLIPS ════════════ */
+  #screen-clips { flex: 1; height: calc(100vh - 52px); overflow-y: auto; background: var(--bg); }
+  .clips-page { padding: 32px 40px; max-width: 1100px; }
+  .clips-page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
+  .clips-page-title { font-size: 22px; font-weight: 900; letter-spacing: -0.5px; }
+  .clips-page-meta { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .clips-toolbar { display: flex; align-items: center; gap: 10px; }
+  .clips-export-all { background: var(--text); color: #fff; border: none; border-radius: 10px; padding: 10px 20px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 7px; transition: opacity .15s; }
+  .clips-export-all:hover { opacity: .82; }
+  .clips-restyle { background: var(--surface); color: var(--text); border: 1.5px solid var(--border); border-radius: 10px; padding: 9px 16px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all .15s; }
+  .clips-restyle:hover { border-color: var(--accent); }
+  .clips-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .clip-card { background: var(--surface); border-radius: 14px; border: 1.5px solid var(--border); overflow: hidden; transition: all .18s; cursor: pointer; }
+  .clip-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,.09); transform: translateY(-2px); border-color: #d8d0c4; }
+  .clip-thumb { aspect-ratio: 9/16; background: linear-gradient(180deg,#1a1a2e 0%,#0f3460 100%); position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .clip-thumb-person { font-size: 36px; position: absolute; top: 38%; left: 50%; transform: translate(-50%,-50%); }
+  .clip-thumb-cap { position: absolute; bottom: 28px; left: 0; right: 0; text-align: center; padding: 0 12px; }
+  .clip-thumb-duration { position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,.65); color: #fff; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; }
+  .clip-thumb-score { position: absolute; top: 8px; left: 8px; background: var(--accent); color: #fff; font-size: 9px; font-weight: 800; padding: 2px 7px; border-radius: 99px; }
+  .clip-info { padding: 12px 14px 14px; }
+  .clip-title { font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 3px; line-height: 1.4; }
+  .clip-meta { font-size: 11px; color: var(--muted); margin-bottom: 12px; }
+  .clip-actions { display: flex; gap: 8px; }
+  .clip-btn-dl { flex: 1; background: var(--text); color: #fff; border: none; border-radius: 8px; padding: 8px 0; font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit; transition: opacity .15s; display: flex; align-items: center; justify-content: center; gap: 5px; }
+  .clip-btn-dl:hover { opacity: .82; }
+  .clip-btn-edit { background: var(--bg); color: var(--text); border: 1.5px solid var(--border); border-radius: 8px; padding: 8px 12px; font-size: 13px; cursor: pointer; transition: all .15s; }
+  .clip-btn-edit:hover { border-color: var(--accent); background: var(--accent-bg); }
+
+  /* ════════════ SCREEN 4 — EDITOR ════════════ */
   #screen-editor { flex: 1; height: calc(100vh - 52px); overflow: hidden; display: flex; flex-direction: column; }
   .editor-topbar { display: flex; align-items: center; justify-content: space-between; padding: 0 20px; height: 48px; background: var(--surface); border-bottom: 1px solid var(--border); flex-shrink: 0; }
   .ed-tools { display: flex; align-items: center; gap: 2px; }
@@ -808,7 +838,7 @@
       <span class="step-sep">›</span>
       <div class="step-pill" id="sp2" onclick="goTo(2)"><div class="step-dot">2</div>Choose style</div>
       <span class="step-sep">›</span>
-      <div class="step-pill" id="sp3" onclick="goTo(3)"><div class="step-dot">3</div>Edit & export</div>
+      <div class="step-pill" id="sp3" onclick="goTo(3)"><div class="step-dot">3</div>My clips</div>
     </div>
     <div class="topbar-right">
       <div class="topbar-btn">?</div>
@@ -940,7 +970,24 @@
     </div>
   </div>
 
-  <!-- ══ SCREEN 3: EDITOR ══ -->
+  <!-- ══ SCREEN 3: MY CLIPS ══ -->
+  <div id="screen-clips" class="screen">
+    <div class="clips-page">
+      <div class="clips-page-header">
+        <div>
+          <div class="clips-page-title">My YouTube Video</div>
+          <div class="clips-page-meta">5 clips generated · Mr. Beast style · 9:16</div>
+        </div>
+        <div class="clips-toolbar">
+          <button class="clips-restyle" onclick="goTo(2)">← Restyle</button>
+          <button class="clips-export-all">↓ Export all (.zip)</button>
+        </div>
+      </div>
+      <div class="clips-grid" id="clips-grid"></div>
+    </div>
+  </div>
+
+  <!-- ══ SCREEN 4: EDITOR ══ -->
   <div id="screen-editor" class="screen">
     <div class="editor-topbar">
       <div class="ed-tools">
@@ -1376,9 +1423,9 @@
 <script>
 // ── Navigation ──
 let cur = 1;
-const SCREENS = {1:'screen-upload',2:'screen-style',3:'screen-editor'};
-const PILLS   = {1:'sp1',2:'sp2',3:'sp3'};
-const TITLES  = {1:'New clip',2:'New clip — Choose style',3:'New clip — Editor'};
+const SCREENS = {1:'screen-upload',2:'screen-style',3:'screen-clips',4:'screen-editor'};
+const PILLS   = {1:'sp1',2:'sp2',3:'sp3',4:'sp3'};
+const TITLES  = {1:'New clip',2:'New clip — Choose style',3:'My clips',4:'My clips — Editor'};
 
 function goTo(n) {
   document.getElementById(SCREENS[cur]).classList.remove('active');
@@ -1394,6 +1441,7 @@ function goTo(n) {
   document.getElementById(PILLS[n]).classList.remove('done');
   document.getElementById('topbar-title').textContent = TITLES[n];
   if (n === 2) startProcAnimation();
+  if (n === 3) buildClipsGrid();
 }
 
 // ── Processing banner animation ──
@@ -1486,6 +1534,41 @@ templates.forEach((t, i) => {
   };
   grid.appendChild(item);
 });
+
+
+// ── My Clips screen ──
+const clipData = [
+  { title: 'AI is NOT making you dumber', duration: '0:42', score: '97', bg: 'linear-gradient(180deg,#1a1a2e 0%,#0f3460 100%)', emoji: '👩', capText: 'AI IS NOT<br>MAKING YOU DUMBER', capStyle: 'background:#FACC15;color:#000;font-weight:900;font-size:11px;padding:3px 8px;border-radius:3px;display:inline-block;' },
+  { title: 'The qualitative data problem', duration: '0:38', score: '91', bg: 'linear-gradient(180deg,#0d1f3c 0%,#1a1a2e 100%)', emoji: '💼', capText: 'THE QUALITATIVE<br>DATA PROBLEM', capStyle: 'background:transparent;color:#fff;font-weight:900;font-size:11px;text-transform:uppercase;letter-spacing:1px;display:inline-block;' },
+  { title: 'Three insights that change everything', duration: '0:51', score: '88', bg: 'linear-gradient(180deg,#020812 0%,#050d1a 100%)', emoji: '🧠', capText: 'THREE INSIGHTS<br>THAT CHANGE', capStyle: 'background:transparent;color:#0FF;font-weight:900;font-size:11px;text-transform:uppercase;display:inline-block;' },
+  { title: 'Why feedback loops matter most', duration: '0:29', score: '84', bg: 'linear-gradient(180deg,#1a1714 0%,#0f0e0b 100%)', emoji: '🔄', capText: 'WHY FEEDBACK<br>LOOPS MATTER', capStyle: 'background:transparent;color:#FACC15;font-weight:700;font-size:11px;text-transform:uppercase;display:inline-block;' },
+  { title: 'Customer data you already have', duration: '0:44', score: '79', bg: 'linear-gradient(180deg,#2e1065 0%,#4c1d95 100%)', emoji: '📊', capText: 'Customer data<br>you already have', capStyle: 'background:transparent;color:#F97316;font-weight:700;font-size:11px;display:inline-block;' },
+];
+
+function buildClipsGrid() {
+  const g = document.getElementById('clips-grid');
+  if (!g || g.children.length) return;
+  clipData.forEach((c, i) => {
+    const card = document.createElement('div');
+    card.className = 'clip-card';
+    card.innerHTML = \`
+      <div class="clip-thumb" style="background:\${c.bg}">
+        <div class="clip-thumb-person">\${c.emoji}</div>
+        <div class="clip-thumb-cap"><span style="\${c.capStyle}">\${c.capText}</span></div>
+        <div class="clip-thumb-duration">\${c.duration}</div>
+        <div class="clip-thumb-score">⚡ \${c.score}</div>
+      </div>
+      <div class="clip-info">
+        <div class="clip-title">\${c.title}</div>
+        <div class="clip-meta">\${c.duration} · 9:16 · 1080p</div>
+        <div class="clip-actions">
+          <button class="clip-btn-dl">↓ Download</button>
+          <button class="clip-btn-edit" onclick="event.stopPropagation();goTo(4)" title="Edit in editor">✂</button>
+        </div>
+      </div>\`;
+    g.appendChild(card);
+  });
+}
 
 // ── Mini grids ──
 const animatedItems = [
