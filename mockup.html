@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Joltra — Redesign Mockup</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Titan+One&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -32,10 +32,11 @@
     width: 180px; flex-shrink: 0;
     background: var(--sidebar-bg);
     display: flex; flex-direction: column;
-    padding: 20px 0; position: fixed;
+    padding: 20px 0 0; position: fixed;
     top: 0; left: 0; bottom: 0; z-index: 200;
     border-right: 1px solid var(--border);
   }
+  .sidebar nav { flex: 1; }
   .sidebar-logo {
     display: flex; align-items: center; gap: 10px;
     padding: 0 18px 24px;
@@ -62,7 +63,7 @@
   .nav-item.active { background: var(--sidebar-active-bg); color: var(--accent); font-weight: 600; }
   .nav-icon { font-size: 14px; width: 18px; text-align: center; flex-shrink: 0; }
   .sidebar-bottom {
-    padding: 12px 14px; border-top: 1px solid var(--border); margin-top: 8px;
+    padding: 12px 14px; border-top: 1px solid var(--border); margin-top: auto; flex-shrink: 0;
   }
   .minutes-box {
     background: var(--bg); border-radius: 10px; padding: 10px 12px; margin-bottom: 12px;
@@ -706,7 +707,7 @@
 <div class="sidebar">
   <div class="sidebar-logo">
     <div class="logo-sq">
-      <span style="font-family:'Fredoka One',cursive;font-size:22px;color:#fff;line-height:1;display:block;">J</span>
+      <span style="font-family:'Titan One',cursive;font-size:24px;color:#fff;line-height:1;">J</span>
     </div>
     JOLTRA
   </div>
@@ -730,11 +731,6 @@
     <a class="nav-item" href="#">
       <svg class="nav-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
       Publish
-    </a>
-    <div class="nav-group-label">Grow</div>
-    <a class="nav-item" href="#">
-      <svg class="nav-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
-      Brand kit
     </a>
   </nav>
   <div class="sidebar-bottom">
