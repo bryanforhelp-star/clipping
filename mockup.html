@@ -269,19 +269,127 @@
 
   .editor-body { display: flex; flex: 1; overflow: hidden; min-height: 0; }
 
-  /* LEFT */
-  .ed-left { width: 260px; flex-shrink: 0; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
-  .panel-tabs { display: flex; border-bottom: 1px solid var(--border); }
-  .panel-tab { flex: 1; padding: 11px; text-align: center; font-size: 12px; font-weight: 600; color: var(--muted); cursor: pointer; border: none; background: transparent; border-bottom: 2px solid transparent; transition: all .15s; font-family: inherit; }
-  .panel-tab.active { color: var(--text); border-bottom-color: var(--accent); }
-  .panel-search { padding: 10px 12px; border-bottom: 1px solid var(--border); }
-  .panel-search input { width: 100%; border: 1.5px solid var(--border); border-radius: 8px; padding: 7px 11px; font-size: 12px; background: var(--bg); outline: none; color: var(--text); font-family: inherit; }
-  .panel-search input:focus { border-color: var(--accent); }
-  .transcript-list { flex: 1; overflow-y: auto; padding: 6px; }
-  .tx-block { padding: 9px 11px; border-radius: 8px; font-size: 12px; line-height: 1.6; color: var(--text); cursor: pointer; transition: background .12s; margin-bottom: 2px; }
-  .tx-block:hover { background: var(--bg); }
-  .tx-block.act { background: var(--accent-bg); }
-  .tx-time { font-size: 10px; color: var(--muted); font-weight: 700; margin-bottom: 2px; }
+  /* LEFT PANEL */
+  .ed-left { width: 300px; flex-shrink: 0; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
+
+  /* pill tabs */
+  .panel-tabs {
+    display: flex; padding: 10px 10px 0; gap: 4px;
+    background: var(--bg); border-bottom: 1px solid var(--border);
+  }
+  .panel-tab {
+    flex: 1; padding: 9px 10px; text-align: center;
+    font-size: 12px; font-weight: 600; color: var(--muted);
+    cursor: pointer; border: none; background: transparent;
+    border-radius: 8px 8px 0 0; transition: all .15s; font-family: inherit;
+  }
+  .panel-tab.active { background: var(--surface); color: var(--text); }
+
+  /* search + action bar */
+  .panel-search-row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 12px; border-bottom: 1px solid var(--border);
+  }
+  .panel-search-wrap {
+    flex: 1; display: flex; align-items: center; gap: 6px;
+    color: var(--muted);
+  }
+  .panel-search-wrap input {
+    flex: 1; border: none; background: transparent; font-size: 13px;
+    outline: none; color: var(--text); font-family: inherit;
+  }
+  .panel-search-wrap input::placeholder { color: var(--muted); }
+  .panel-action-btns { display: flex; gap: 2px; }
+  .pab {
+    width: 28px; height: 28px; border-radius: 6px; border: none;
+    background: transparent; color: var(--muted); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; transition: all .12s;
+  }
+  .pab:hover { background: var(--bg); color: var(--text); }
+
+  /* subtitle mode secondary bar */
+  .subtitle-bar {
+    display: none; align-items: center; gap: 6px;
+    padding: 8px 12px; border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .subtitle-bar.visible { display: flex; }
+  .sb-pill {
+    display: flex; align-items: center; gap: 5px;
+    padding: 5px 10px; border-radius: 7px;
+    border: 1px solid var(--border); background: var(--surface);
+    font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit;
+    transition: all .12s; color: var(--text);
+  }
+  .sb-pill:hover { border-color: var(--accent); }
+  .sb-icon-btn {
+    width: 30px; height: 30px; border-radius: 7px; border: none;
+    background: transparent; cursor: pointer; color: var(--muted);
+    display: flex; align-items: center; justify-content: center; font-size: 14px;
+    transition: all .12s; margin-left: auto;
+  }
+  .sb-icon-btn:hover { background: var(--bg); color: var(--text); }
+
+  /* transcript view */
+  .transcript-body { flex: 1; overflow-y: auto; padding: 16px 14px; font-size: 14px; line-height: 1.8; color: var(--text); }
+  .tx-deleted { text-decoration: line-through; color: #bbb; }
+  .tx-current { background: #6C63FF; color: #fff; border-radius: 3px; padding: 1px 3px; }
+  .tx-keyword { text-decoration: underline; text-decoration-color: var(--accent); }
+
+  /* subtitle blocks */
+  .subtitle-body { flex: 1; overflow-y: auto; }
+  .sb-block {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 14px 12px; border-bottom: 1px solid var(--border);
+    cursor: pointer; transition: background .12s; position: relative;
+  }
+  .sb-block:hover { background: var(--bg); }
+  .sb-block.act { }
+  .sb-active-bar {
+    width: 3px; border-radius: 2px; background: #6C63FF;
+    position: absolute; left: 0; top: 12px; bottom: 12px;
+  }
+  .sb-block-content { flex: 1; min-width: 0; }
+  .sb-time { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; margin-bottom: 4px; }
+  .sb-text { font-size: 14px; line-height: 1.5; color: var(--text); }
+  .sb-text span { text-decoration: underline; }
+  .sb-emoji-btn {
+    width: 36px; height: 36px; border-radius: 8px;
+    background: var(--bg); border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; font-size: 16px;
+    flex-shrink: 0; transition: background .12s;
+  }
+  .sb-emoji-btn:hover { background: var(--border); }
+
+  /* panel bottom bar */
+  .panel-bottom {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 12px; border-top: 1px solid var(--border);
+    background: var(--surface); flex-shrink: 0;
+  }
+  .pb-tool {
+    width: 26px; height: 26px; border-radius: 6px; border: none;
+    background: transparent; cursor: pointer; color: var(--muted);
+    display: flex; align-items: center; justify-content: center; font-size: 12px;
+    transition: all .12s;
+  }
+  .pb-tool:hover { background: var(--bg); color: var(--text); }
+  .pb-zoom-slider {
+    flex: 1; max-width: 80px; -webkit-appearance: none; appearance: none;
+    height: 3px; border-radius: 2px; background: #6C63FF; outline: none; cursor: pointer;
+  }
+  .pb-zoom-slider::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%;
+    background: #fff; border: 2px solid #6C63FF; cursor: pointer;
+    box-shadow: 0 1px 4px rgba(0,0,0,.2);
+  }
+  .pb-time { font-size: 11px; font-variant-numeric: tabular-nums; color: var(--muted); margin-left: auto; }
+  .pb-play {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--text); border: none; color: #fff; font-size: 10px;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+  }
 
   /* CENTER */
   .ed-center { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 16px; background: var(--bg); overflow: hidden; gap: 12px; }
@@ -807,20 +915,136 @@
     <div class="editor-body">
       <!-- LEFT -->
       <div class="ed-left">
+
+        <!-- Tabs -->
         <div class="panel-tabs">
-          <button class="panel-tab active">Transcript</button>
-          <button class="panel-tab" onclick="swPanelTab(this)">Subtitles</button>
+          <button class="panel-tab active" id="tab-transcript" onclick="switchPanelTab('transcript')">Transcript</button>
+          <button class="panel-tab" id="tab-subtitles" onclick="switchPanelTab('subtitles')">Edit subtitles</button>
         </div>
-        <div class="panel-search"><input type="text" placeholder="🔍  Search transcript…" /></div>
-        <div class="transcript-list">
-          <div class="tx-block act"><div class="tx-time">0:00</div>AI is not making you dumber. How you are using AI is making you dumber.</div>
-          <div class="tx-block"><div class="tx-time">0:06</div>In June of this year, 2025, this study from MIT went viral.</div>
-          <div class="tx-block"><div class="tx-time">0:12</div>They took basically 50 students, all from elite colleges in Massachusetts,</div>
-          <div class="tx-block"><div class="tx-time">0:20</div>split them up into three groups, and asked them to all write essays.</div>
-          <div class="tx-block"><div class="tx-time">0:27</div>Group one used ChatGPT. Group two used a basic search engine.</div>
-          <div class="tx-block"><div class="tx-time">0:34</div>Group three had no AI access at all. The results were shocking.</div>
-          <div class="tx-block"><div class="tx-time">0:42</div>The students who used ChatGPT scored the lowest on retention tests.</div>
+
+        <!-- Search + actions -->
+        <div class="panel-search-row">
+          <div class="panel-search-wrap">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            <input type="text" placeholder="Search" />
+          </div>
+          <!-- Transcript actions -->
+          <div class="panel-action-btns" id="tx-actions">
+            <button class="pab" title="Copy">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </button>
+            <button class="pab" title="Download">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            </button>
+            <button class="pab" title="Filter">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="21" y1="6" x2="3" y2="6"/><line x1="15" y1="12" x2="9" y2="12"/><line x1="17" y1="18" x2="7" y2="18"/></svg>
+            </button>
+          </div>
+          <!-- Subtitle actions -->
+          <div class="panel-action-btns" id="sb-actions" style="display:none">
+            <button class="pab" title="Edit">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </button>
+            <button class="pab" title="Translate">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>
+            </button>
+            <button class="pab" title="Settings">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="4" y1="6" x2="20" y2="6"/><circle cx="8" cy="6" r="2" fill="white"/><line x1="4" y1="12" x2="20" y2="12"/><circle cx="16" cy="12" r="2" fill="white"/><line x1="4" y1="18" x2="20" y2="18"/><circle cx="10" cy="18" r="2" fill="white"/></svg>
+            </button>
+          </div>
         </div>
+
+        <!-- Subtitle secondary bar (CC pill) -->
+        <div class="subtitle-bar" id="subtitle-bar">
+          <button class="sb-pill">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M8 10h.01M12 10h4M8 14h.01M12 14h4"/></svg>
+            Sentence
+          </button>
+          <button class="sb-icon-btn" title="Edit subtitles">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          </button>
+          <button class="sb-icon-btn" title="Translate">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>
+          </button>
+          <button class="sb-icon-btn" title="Settings">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </button>
+        </div>
+
+        <!-- Transcript view -->
+        <div class="transcript-body" id="panel-transcript">
+          <span class="tx-deleted">from the study that was published earlier this year, comments from conversations that I've had where I've spoken to customers who are actively </span><em class="tx-deleted" style="font-style:italic;">[1.1s]</em><span class="tx-deleted"> watching Synthesia Academy material. This is coming from all the feedback forms. This is coming from G2 reviews. And I only have three because if I don't put my pin in somewhere and say, okay, I have enough, I'm just going to keep organizing prior time. So </span><span class="tx-current">At</span> a certain point, you just take all of the <span class="tx-keyword">qualitative data</span> that's coming in. If you have customer data that you can look at, where you're getting that type of specific data on particular features or problems you're struggling with, of course, look at that as well. But <span class="tx-deleted">take, you know,</span> take a day, look at those insights, boil them down to your top three, go back, search, put that into <span class="tx-keyword">ChatGPT</span> and say, what are certain things that I can search for? Then search for them, see what the interest is. And if there's something there, you know you've struck gold.
+        </div>
+
+        <!-- Subtitle blocks view -->
+        <div class="subtitle-body" id="panel-subtitles" style="display:none">
+          <div class="sb-block act">
+            <div class="sb-active-bar"></div>
+            <div class="sb-block-content">
+              <div class="sb-time">00:00.0 – 00:00.80</div>
+              <div class="sb-text"><span>At</span> a certain point,</div>
+            </div>
+            <button class="sb-emoji-btn">🎯</button>
+          </div>
+          <div class="sb-block">
+            <div class="sb-block-content">
+              <div class="sb-time">00:00.80 – 00:02.58</div>
+              <div class="sb-text">you just take all</div>
+            </div>
+            <button class="sb-emoji-btn" style="font-size:13px;color:var(--muted)">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/><path d="M12 12v.01"/><circle cx="17" cy="17" r="3" fill="white"/><line x1="17" y1="15.5" x2="17" y2="18.5"/><line x1="15.5" y1="17" x2="18.5" y2="17"/></svg>
+            </button>
+          </div>
+          <div class="sb-block">
+            <div class="sb-block-content">
+              <div class="sb-time">00:02.58 – 00:03.76</div>
+              <div class="sb-text">of the <span>qualitative</span></div>
+            </div>
+            <button class="sb-emoji-btn" style="font-size:13px;color:var(--muted)">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/><path d="M12 12v.01"/><circle cx="17" cy="17" r="3" fill="white"/><line x1="17" y1="15.5" x2="17" y2="18.5"/><line x1="15.5" y1="17" x2="18.5" y2="17"/></svg>
+            </button>
+          </div>
+          <div class="sb-block">
+            <div class="sb-block-content">
+              <div class="sb-time">00:03.76 – 00:04.36</div>
+              <div class="sb-text"><span>data</span> that's</div>
+            </div>
+            <button class="sb-emoji-btn">📊</button>
+          </div>
+          <div class="sb-block">
+            <div class="sb-block-content">
+              <div class="sb-time">00:04.36 – 00:06.10</div>
+              <div class="sb-text">coming in. If you</div>
+            </div>
+            <button class="sb-emoji-btn" style="font-size:13px;color:var(--muted)">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/><path d="M12 12v.01"/><circle cx="17" cy="17" r="3" fill="white"/><line x1="17" y1="15.5" x2="17" y2="18.5"/><line x1="15.5" y1="17" x2="18.5" y2="17"/></svg>
+            </button>
+          </div>
+          <div class="sb-block">
+            <div class="sb-block-content">
+              <div class="sb-time">00:06.10 – 00:08.40</div>
+              <div class="sb-text">have <span>customer data</span></div>
+            </div>
+            <button class="sb-emoji-btn">💡</button>
+          </div>
+        </div>
+
+        <!-- Bottom toolbar -->
+        <div class="panel-bottom">
+          <button class="pb-tool" title="Align">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/><line x1="3" y1="18" x2="18" y2="18"/></svg>
+          </button>
+          <button class="pb-tool" title="Text size">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+          </button>
+          <button class="pb-tool">−</button>
+          <input class="pb-zoom-slider" type="range" min="0" max="100" value="55" />
+          <button class="pb-tool">+</button>
+          <span class="pb-time">00:00.0</span>
+          <button class="pb-play">▶</button>
+          <span class="pb-time">00:48.0</span>
+        </div>
+
       </div>
 
       <!-- CENTER -->
@@ -1201,7 +1425,20 @@ buildMini('mini-simple', simpleItems);
 // ── UI helpers ──
 function swSourceTab(el) { el.closest('.source-tabs').querySelectorAll('.source-tab').forEach(t=>t.classList.remove('active')); el.classList.add('active'); }
 function swTab(el) { el.closest('.tmpl-tabs').querySelectorAll('.tmpl-tab').forEach(t=>t.classList.remove('active')); el.classList.add('active'); }
-function swPanelTab(el) { el.closest('.panel-tabs').querySelectorAll('.panel-tab').forEach(t=>t.classList.remove('active')); el.classList.add('active'); }
+function switchPanelTab(tab) {
+  document.getElementById('tab-transcript').classList.toggle('active', tab==='transcript');
+  document.getElementById('tab-subtitles').classList.toggle('active', tab==='subtitles');
+  document.getElementById('panel-transcript').style.display = tab==='transcript' ? 'block' : 'none';
+  document.getElementById('panel-subtitles').style.display = tab==='subtitles' ? 'block' : 'none';
+  document.getElementById('subtitle-bar').classList.toggle('visible', tab==='subtitles');
+  document.getElementById('tx-actions').style.display = tab==='transcript' ? 'flex' : 'none';
+  document.getElementById('sb-actions').style.display = tab==='subtitles' ? 'flex' : 'none';
+}
+document.querySelectorAll('.sb-block').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.sb-block').forEach(x=>{x.classList.remove('act');x.querySelector('.sb-active-bar')&&(x.querySelector('.sb-active-bar').style.display='none');});
+  b.classList.add('act');
+  if(b.querySelector('.sb-active-bar')) b.querySelector('.sb-active-bar').style.display='block';
+}));
 function swRightTab(el) {
   el.closest('.r-tabs').querySelectorAll('.r-tab').forEach(t=>t.classList.remove('active')); el.classList.add('active');
   const isS = el.textContent==='Settings';
