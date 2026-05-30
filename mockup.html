@@ -1582,9 +1582,7 @@ const clipData = [
 
 function buildClipsGrid() {
   const g = document.getElementById('clips-grid');
-  if (!g) return;
-  // clear and reset each time so animation re-runs
-  g.innerHTML = '';
+  if (!g || g.children.length) return; // already loaded or loading — don't restart
 
   // Step 1: render all as skeletons
   clipData.forEach(() => {
