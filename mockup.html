@@ -17,9 +17,9 @@
     --accent: #C8A84B;
     --accent-bg: #F0E8D0;
     --accent-hover: #B5973E;
-    --sidebar-bg: #1C1812;
-    --sidebar-muted: rgba(255,255,255,0.45);
-    --sidebar-active-bg: rgba(255,255,255,0.1);
+    --sidebar-bg: #FFFFFF;
+    --sidebar-muted: #9B9389;
+    --sidebar-active-bg: #F5F0E6;
   }
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -34,18 +34,20 @@
     display: flex; flex-direction: column;
     padding: 20px 0; position: fixed;
     top: 0; left: 0; bottom: 0; z-index: 200;
+    border-right: 1px solid var(--border);
   }
   .sidebar-logo {
-    display: flex; align-items: center; gap: 9px;
+    display: flex; align-items: center; gap: 10px;
     padding: 0 18px 24px;
-    font-weight: 800; font-size: 17px; color: #fff; letter-spacing: -0.4px;
+    font-weight: 900; font-size: 16px; color: var(--text); letter-spacing: 0.5px;
   }
   .logo-sq {
-    width: 28px; height: 28px; border-radius: 7px;
-    background: var(--accent);
+    width: 34px; height: 34px; border-radius: 8px;
+    background: #000;
     display: flex; align-items: center; justify-content: center;
-    font-size: 14px; font-weight: 900; color: #fff;
+    flex-shrink: 0;
   }
+  .logo-sq svg { width: 22px; height: 22px; }
   .nav-group-label {
     font-size: 10px; font-weight: 600; text-transform: uppercase;
     letter-spacing: 1.2px; color: var(--sidebar-muted); padding: 16px 18px 6px;
@@ -53,25 +55,33 @@
   .nav-item {
     display: flex; align-items: center; gap: 10px;
     padding: 9px 18px; font-size: 13px; font-weight: 500;
-    color: var(--sidebar-muted); cursor: pointer; transition: all .15s; text-decoration: none;
+    color: var(--text); cursor: pointer; transition: all .15s; text-decoration: none;
+    border-radius: 8px; margin: 1px 8px;
   }
-  .nav-item:hover, .nav-item.active { color: #fff; background: var(--sidebar-active-bg); }
-  .nav-icon { font-size: 14px; width: 18px; text-align: center; }
+  .nav-item:hover { background: var(--sidebar-active-bg); }
+  .nav-item.active { background: var(--sidebar-active-bg); color: var(--accent); font-weight: 600; }
+  .nav-icon { font-size: 14px; width: 18px; text-align: center; flex-shrink: 0; }
   .sidebar-bottom {
-    padding: 16px 18px; border-top: 1px solid rgba(255,255,255,0.08); margin-top: 8px;
+    padding: 12px 14px; border-top: 1px solid var(--border); margin-top: 8px;
   }
-  .user-row { display: flex; align-items: center; gap: 9px; cursor: pointer; }
+  .minutes-box {
+    background: var(--bg); border-radius: 10px; padding: 10px 12px; margin-bottom: 12px;
+  }
+  .minutes-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+  .minutes-label { font-size: 12px; color: var(--muted); }
+  .minutes-val { font-size: 12px; font-weight: 700; color: var(--text); }
+  .minutes-sub { font-size: 11px; color: var(--muted); }
+  .minutes-sub a { color: var(--accent); font-weight: 600; text-decoration: none; }
+  .user-row { display: flex; align-items: center; gap: 9px; cursor: pointer; padding: 4px 2px; }
   .user-avatar {
-    width: 30px; height: 30px; border-radius: 50%;
-    background: linear-gradient(135deg,#667eea,#764ba2);
+    width: 32px; height: 32px; border-radius: 50%;
+    background: #C8A84B;
     display: flex; align-items: center; justify-content: center;
-    font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0;
+    font-size: 12px; font-weight: 700; color: #fff; flex-shrink: 0;
   }
-  .user-name { font-size: 12px; font-weight: 600; color: #fff; }
-  .user-plan { font-size: 10px; color: var(--sidebar-muted); }
-  .min-bar { margin-top: 12px; background: rgba(255,255,255,0.1); border-radius: 3px; height: 4px; }
-  .min-fill { height: 100%; width: 0%; background: var(--accent); border-radius: 3px; }
-  .min-label { font-size: 10px; color: var(--sidebar-muted); margin-top: 4px; }
+  .user-name { font-size: 13px; font-weight: 700; color: var(--text); }
+  .user-plan { font-size: 11px; color: var(--muted); }
+  .user-chevron { margin-left: auto; color: var(--muted); font-size: 11px; }
 
   /* ── MAIN ── */
   .main { margin-left: 180px; flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
@@ -591,23 +601,59 @@
 
 <!-- ══ SIDEBAR ══ -->
 <div class="sidebar">
-  <div class="sidebar-logo"><div class="logo-sq">J</div>JOLTRA</div>
+  <div class="sidebar-logo">
+    <div class="logo-sq">
+      <!-- Joltra J logo SVG -->
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M72 18C72 18 68 14 58 14C44 14 34 24 34 38C34 50 40 56 40 64C40 72 36 78 28 80C24 81 20 80 18 78C22 84 30 88 40 86C54 83 60 72 60 62C60 52 54 46 54 36C54 28 60 22 68 22C70 22 72 22 72 22L72 18Z" fill="white"/>
+        <ellipse cx="44" cy="78" rx="10" ry="10" fill="white"/>
+      </svg>
+    </div>
+    JOLTRA
+  </div>
   <nav>
-    <a class="nav-item" href="#"><span class="nav-icon">⊞</span> Dashboard</a>
-    <a class="nav-item active" href="#"><span class="nav-icon">✦</span> New clip</a>
-    <a class="nav-item" href="#"><span class="nav-icon">▤</span> My clips</a>
-    <a class="nav-item" href="#"><span class="nav-icon">◎</span> Review</a>
-    <a class="nav-item" href="#"><span class="nav-icon">↗</span> Publish</a>
+    <a class="nav-item" href="#">
+      <svg class="nav-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </a>
+    <a class="nav-item active" href="#">
+      <svg class="nav-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M10 10l5 3-5 3V10z" fill="currentColor" stroke="none"/></svg>
+      New clip
+    </a>
+    <a class="nav-item" href="#">
+      <svg class="nav-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      My clips
+    </a>
+    <a class="nav-item" href="#">
+      <svg class="nav-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      Review
+    </a>
+    <a class="nav-item" href="#">
+      <svg class="nav-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      Publish
+    </a>
     <div class="nav-group-label">Grow</div>
-    <a class="nav-item" href="#"><span class="nav-icon">◈</span> Brand kit</a>
+    <a class="nav-item" href="#">
+      <svg class="nav-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+      Brand kit
+    </a>
   </nav>
   <div class="sidebar-bottom">
+    <div class="minutes-box">
+      <div class="minutes-row">
+        <span class="minutes-label">Minutes used</span>
+        <span class="minutes-val">0/30</span>
+      </div>
+      <div class="minutes-sub">Resets monthly · <a href="#">Upgrade</a></div>
+    </div>
     <div class="user-row">
       <div class="user-avatar">KR</div>
-      <div><div class="user-name">Kyndall Ramirez</div><div class="user-plan">Free · Trial</div></div>
+      <div>
+        <div class="user-name">Kyndall Ramirez<span style="font-size:10px;font-weight:400;color:var(--muted);margin-left:4px;">Trial</span></div>
+        <div class="user-plan">· free</div>
+      </div>
+      <span class="user-chevron">▾</span>
     </div>
-    <div class="min-bar"><div class="min-fill"></div></div>
-    <div class="min-label">0 / 30 minutes used</div>
   </div>
 </div>
 
