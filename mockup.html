@@ -330,46 +330,57 @@
   .clip-btn-edit:hover { border-color: var(--accent); background: var(--accent-bg); }
 
   /* Card generation states */
-  @keyframes pulse-ring {
-    0%   { transform: translate(-50%,-50%) scale(.85); opacity: .7; }
-    50%  { transform: translate(-50%,-50%) scale(1.05); opacity: 1; }
-    100% { transform: translate(-50%,-50%) scale(.85); opacity: .7; }
-  }
-  @keyframes scan-line {
-    0%   { top: 0%; opacity: .6; }
-    100% { top: 100%; opacity: 0; }
-  }
   @keyframes revealCard {
     from { opacity: 0; transform: scale(.97) translateY(6px); }
     to   { opacity: 1; transform: scale(1) translateY(0); }
   }
+  @keyframes eq1 { 0%,100%{height:20%} 25%{height:80%} 50%{height:40%} 75%{height:90%} }
+  @keyframes eq2 { 0%,100%{height:60%} 25%{height:25%} 50%{height:95%} 75%{height:35%} }
+  @keyframes eq3 { 0%,100%{height:35%} 25%{height:70%} 50%{height:20%} 75%{height:85%} }
+  @keyframes eq4 { 0%,100%{height:75%} 25%{height:40%} 50%{height:65%} 75%{height:20%} }
+  @keyframes eq5 { 0%,100%{height:45%} 25%{height:95%} 50%{height:30%} 75%{height:70%} }
+  @keyframes unblur { from{filter:blur(10px) brightness(.5)} to{filter:blur(0px) brightness(1)} }
+
   .clip-card { transition: box-shadow .18s, border-color .18s, transform .18s; }
-  .clip-card.skeleton .clip-thumb {
-    background: #111 !important;
-    position: relative; overflow: hidden;
-  }
-  /* scanning line */
-  .clip-card.skeleton .clip-thumb::before {
-    content: ''; position: absolute; left: 0; right: 0; height: 2px;
-    background: linear-gradient(90deg, transparent, var(--accent), transparent);
-    animation: scan-line 1.8s ease-in-out infinite;
-    z-index: 3;
-  }
-  /* centre pulse ring */
-  .clip-card.skeleton .clip-thumb::after {
-    content: ''; position: absolute; top: 50%; left: 50%;
-    width: 44px; height: 44px; border-radius: 50%;
-    border: 2px solid var(--accent);
-    animation: pulse-ring 1.6s ease-in-out infinite;
-    z-index: 3;
-  }
+
+  .clip-card.skeleton .clip-thumb { position: relative; overflow: hidden; }
   .clip-card.skeleton .clip-thumb-person,
   .clip-card.skeleton .clip-thumb-cap,
   .clip-card.skeleton .clip-thumb-duration,
-  .clip-card.skeleton .clip-thumb-score { opacity: 0; }
-  .clip-card.skeleton .clip-info { opacity: .35; pointer-events: none; }
+  .clip-card.skeleton .clip-thumb-score { filter: blur(8px); opacity: .4; }
+
+  /* blur overlay */
+  .clip-card.skeleton .clip-thumb::before {
+    content: ''; position: absolute; inset: 0;
+    backdrop-filter: blur(8px); background: rgba(0,0,0,.45);
+    z-index: 2;
+  }
+
+  /* eq bars container */
+  .clip-card.skeleton .clip-thumb::after {
+    content: ''; display: none; /* bars injected via JS */
+  }
+
+  .eq-bars {
+    position: absolute; bottom: 30%; left: 50%; transform: translateX(-50%);
+    display: flex; align-items: flex-end; gap: 5px; height: 36px; z-index: 3;
+  }
+  .eq-bar {
+    width: 4px; border-radius: 2px 2px 0 0;
+    background: rgba(255,255,255,0.85);
+    transform-origin: bottom;
+  }
+  .eq-bar:nth-child(1) { animation: eq1 .9s ease-in-out infinite; }
+  .eq-bar:nth-child(2) { animation: eq2 .7s ease-in-out infinite .1s; }
+  .eq-bar:nth-child(3) { animation: eq3 .8s ease-in-out infinite .05s; }
+  .eq-bar:nth-child(4) { animation: eq4 .75s ease-in-out infinite .15s; }
+  .eq-bar:nth-child(5) { animation: eq5 .85s ease-in-out infinite .08s; }
+
+  .clip-card.skeleton .clip-info { opacity: .3; pointer-events: none; }
   .clip-card.skeleton .clip-btn-dl,
   .clip-card.skeleton .clip-btn-edit { opacity: 0; pointer-events: none; }
+
+  .clip-card.revealed .clip-thumb { animation: unblur .7s ease both; }
   .clip-card.revealed { animation: revealCard .5s cubic-bezier(.34,1.26,.64,1) both; }
 
 
@@ -1628,7 +1639,7 @@ function buildClipsGrid() {
   }
   updateStatus();
 
-  // Render skeletons with the card's actual bg so it feels "in progress"
+  // Render skeletons — content visible but blurred, eq bars animating on top
   clipData.forEach((c) => {
     const card = document.createElement('div');
     card.className = 'clip-card skeleton';
@@ -1638,6 +1649,13 @@ function buildClipsGrid() {
         <div class="clip-thumb-cap"><span style="${c.capStyle}">${c.capText}</span></div>
         <div class="clip-thumb-duration">${c.duration}</div>
         <div class="clip-thumb-score">⚡ ${c.score}</div>
+        <div class="eq-bars">
+          <div class="eq-bar" style="height:40%"></div>
+          <div class="eq-bar" style="height:70%"></div>
+          <div class="eq-bar" style="height:30%"></div>
+          <div class="eq-bar" style="height:85%"></div>
+          <div class="eq-bar" style="height:50%"></div>
+        </div>
       </div>
       <div class="clip-info">
         <div class="clip-title">${c.title}</div>
@@ -1657,6 +1675,8 @@ function buildClipsGrid() {
       const card = cards[i];
       card.classList.remove('skeleton');
       card.classList.add('revealed');
+      const eq = card.querySelector('.eq-bars');
+      if (eq) eq.remove();
       revealed++;
       updateStatus();
     // realistic: first clip fast, rest vary between 5-12s apart
