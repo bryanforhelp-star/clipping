@@ -1551,21 +1551,21 @@ function buildClipsGrid() {
   clipData.forEach((c, i) => {
     const card = document.createElement('div');
     card.className = 'clip-card';
-    card.innerHTML = \`
-      <div class="clip-thumb" style="background:\${c.bg}">
-        <div class="clip-thumb-person">\${c.emoji}</div>
-        <div class="clip-thumb-cap"><span style="\${c.capStyle}">\${c.capText}</span></div>
-        <div class="clip-thumb-duration">\${c.duration}</div>
-        <div class="clip-thumb-score">⚡ \${c.score}</div>
+    card.innerHTML = `
+      <div class="clip-thumb" style="background:${c.bg}">
+        <div class="clip-thumb-person">${c.emoji}</div>
+        <div class="clip-thumb-cap"><span style="${c.capStyle}">${c.capText}</span></div>
+        <div class="clip-thumb-duration">${c.duration}</div>
+        <div class="clip-thumb-score">⚡ ${c.score}</div>
       </div>
       <div class="clip-info">
-        <div class="clip-title">\${c.title}</div>
-        <div class="clip-meta">\${c.duration} · 9:16 · 1080p</div>
+        <div class="clip-title">${c.title}</div>
+        <div class="clip-meta">${c.duration} · 9:16 · 1080p</div>
         <div class="clip-actions">
           <button class="clip-btn-dl">↓ Download</button>
           <button class="clip-btn-edit" onclick="event.stopPropagation();goTo(4)" title="Edit in editor">✂</button>
         </div>
-      </div>\`;
+      </div>`;
     g.appendChild(card);
   });
 }
