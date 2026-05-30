@@ -315,6 +315,41 @@
   .clip-btn-edit { background: var(--bg); color: var(--text); border: 1.5px solid var(--border); border-radius: 8px; padding: 8px 12px; font-size: 13px; cursor: pointer; transition: all .15s; }
   .clip-btn-edit:hover { border-color: var(--accent); background: var(--accent-bg); }
 
+  /* Skeleton loading */
+  @keyframes shimmer {
+    0% { background-position: -600px 0; }
+    100% { background-position: 600px 0; }
+  }
+  .skel {
+    background: linear-gradient(90deg, #e8e3db 25%, #f0ece4 50%, #e8e3db 75%);
+    background-size: 600px 100%;
+    animation: shimmer 1.4s ease-in-out infinite;
+    border-radius: 6px;
+  }
+  .clip-card.skeleton .clip-thumb { background: #e0dbd2 !important; }
+  .clip-card.skeleton .clip-thumb-person,
+  .clip-card.skeleton .clip-thumb-cap,
+  .clip-card.skeleton .clip-thumb-duration,
+  .clip-card.skeleton .clip-thumb-score { display: none; }
+  .clip-card.skeleton .clip-thumb::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(90deg, #ddd8cf 25%, #e8e3db 50%, #ddd8cf 75%);
+    background-size: 600px 100%;
+    animation: shimmer 1.4s ease-in-out infinite;
+  }
+  .clip-card.skeleton .clip-title { width: 80%; height: 12px; margin-bottom: 8px; }
+  .clip-card.skeleton .clip-meta  { width: 50%; height: 10px; margin-bottom: 14px; }
+  .clip-card.skeleton .clip-btn-dl,
+  .clip-card.skeleton .clip-btn-edit { opacity: 0; pointer-events: none; }
+  .clip-card { transition: opacity .4s ease, transform .4s ease; }
+  .clip-card.skeleton { opacity: 0.7; }
+  .clip-card.revealed { animation: revealCard .4s ease both; }
+  @keyframes revealCard {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+
   /* ════════════ SCREEN 4 — EDITOR ════════════ */
   #screen-editor { flex: 1; height: calc(100vh - 52px); overflow: hidden; display: flex; flex-direction: column; }
   .editor-topbar { display: flex; align-items: center; justify-content: space-between; padding: 0 20px; height: 48px; background: var(--surface); border-bottom: 1px solid var(--border); flex-shrink: 0; }
@@ -1547,26 +1582,50 @@ const clipData = [
 
 function buildClipsGrid() {
   const g = document.getElementById('clips-grid');
-  if (!g || g.children.length) return;
-  clipData.forEach((c, i) => {
+  if (!g) return;
+  // clear and reset each time so animation re-runs
+  g.innerHTML = '';
+
+  // Step 1: render all as skeletons
+  clipData.forEach(() => {
     const card = document.createElement('div');
-    card.className = 'clip-card';
+    card.className = 'clip-card skeleton';
     card.innerHTML = `
-      <div class="clip-thumb" style="background:${c.bg}">
-        <div class="clip-thumb-person">${c.emoji}</div>
-        <div class="clip-thumb-cap"><span style="${c.capStyle}">${c.capText}</span></div>
-        <div class="clip-thumb-duration">${c.duration}</div>
-        <div class="clip-thumb-score">⚡ ${c.score}</div>
-      </div>
+      <div class="clip-thumb"></div>
       <div class="clip-info">
-        <div class="clip-title">${c.title}</div>
-        <div class="clip-meta">${c.duration} · 9:16 · 1080p</div>
+        <div class="clip-title skel"></div>
+        <div class="clip-meta skel"></div>
         <div class="clip-actions">
           <button class="clip-btn-dl">↓ Download</button>
-          <button class="clip-btn-edit" onclick="event.stopPropagation();goTo(4)" title="Edit in editor">✂</button>
+          <button class="clip-btn-edit">✂</button>
         </div>
       </div>`;
     g.appendChild(card);
+  });
+
+  // Step 2: reveal each card with staggered delay
+  const cards = Array.from(g.children);
+  clipData.forEach((c, i) => {
+    setTimeout(() => {
+      const card = cards[i];
+      card.classList.remove('skeleton');
+      card.classList.add('revealed');
+      card.innerHTML = `
+        <div class="clip-thumb" style="background:${c.bg}">
+          <div class="clip-thumb-person">${c.emoji}</div>
+          <div class="clip-thumb-cap"><span style="${c.capStyle}">${c.capText}</span></div>
+          <div class="clip-thumb-duration">${c.duration}</div>
+          <div class="clip-thumb-score">⚡ ${c.score}</div>
+        </div>
+        <div class="clip-info">
+          <div class="clip-title">${c.title}</div>
+          <div class="clip-meta">${c.duration} · 9:16 · 1080p</div>
+          <div class="clip-actions">
+            <button class="clip-btn-dl">↓ Download</button>
+            <button class="clip-btn-edit" onclick="event.stopPropagation();goTo(4)" title="Edit in editor">✂</button>
+          </div>
+        </div>`;
+    }, 600 + i * 500);
   });
 }
 
