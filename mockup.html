@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Joltra — Redesign Mockup</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -706,11 +706,7 @@
 <div class="sidebar">
   <div class="sidebar-logo">
     <div class="logo-sq">
-      <!-- Joltra J logo SVG -->
-      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M72 18C72 18 68 14 58 14C44 14 34 24 34 38C34 50 40 56 40 64C40 72 36 78 28 80C24 81 20 80 18 78C22 84 30 88 40 86C54 83 60 72 60 62C60 52 54 46 54 36C54 28 60 22 68 22C70 22 72 22 72 22L72 18Z" fill="white"/>
-        <ellipse cx="44" cy="78" rx="10" ry="10" fill="white"/>
-      </svg>
+      <span style="font-family:'Fredoka One',cursive;font-size:22px;color:#fff;line-height:1;display:block;">J</span>
     </div>
     JOLTRA
   </div>
@@ -749,13 +745,14 @@
       </div>
       <div class="minutes-sub">Resets monthly · <a href="#">Upgrade</a></div>
     </div>
+    <div style="height:1px;background:var(--border);margin:10px 0 12px;"></div>
     <div class="user-row">
       <div class="user-avatar">KR</div>
-      <div>
-        <div class="user-name">Kyndall Ramirez<span style="font-size:10px;font-weight:400;color:var(--muted);margin-left:4px;">Trial</span></div>
+      <div style="flex:1;min-width:0;">
+        <div class="user-name">Kyndall Ramirez<span style="font-size:10px;font-weight:500;color:var(--muted);margin-left:5px;background:var(--bg);padding:1px 5px;border-radius:4px;">Trial</span></div>
         <div class="user-plan">· free</div>
       </div>
-      <span class="user-chevron">▾</span>
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" style="color:var(--muted);flex-shrink:0;"><path d="M6 9l6 6 6-6"/></svg>
     </div>
   </div>
 </div>
