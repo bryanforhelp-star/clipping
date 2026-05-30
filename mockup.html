@@ -90,8 +90,10 @@
   .btn-upgrade:hover { background: var(--accent-hover); }
 
   /* ── SCREENS ── */
-  .screen { display: none; animation: fadeUp .3s ease; }
-  .screen.active { display: block; }
+  .screen { display: none !important; animation: fadeUp .3s ease; }
+  .screen.active { display: block !important; }
+  #screen-editor.active { display: flex !important; }
+  #screen-upload.active { display: flex !important; }
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(12px); }
     to   { opacity: 1; transform: translateY(0); }
