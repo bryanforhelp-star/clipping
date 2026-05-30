@@ -156,6 +156,33 @@
   /* ════════════ SCREEN 2 — STYLE ════════════ */
   #screen-style { padding: 36px 40px; max-width: 1060px; height: calc(100vh - 52px); overflow-y: auto; }
 
+  /* Processing banner */
+  .proc-banner {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 12px 16px; margin-bottom: 24px;
+    box-shadow: 0 1px 6px rgba(0,0,0,.05);
+  }
+  .proc-icon { font-size: 16px; flex-shrink: 0; animation: proc-spin 2s linear infinite; }
+  @keyframes proc-spin { to { transform: rotate(360deg); } }
+  .proc-text { flex: 1; min-width: 0; }
+  .proc-label { font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 5px; }
+  .proc-label span { color: var(--muted); font-weight: 500; margin-left: 6px; }
+  .proc-bar-wrap { height: 5px; background: var(--bg); border-radius: 99px; overflow: hidden; }
+  .proc-bar-fill {
+    height: 100%; border-radius: 99px;
+    background: linear-gradient(90deg, var(--accent), #e8c060);
+    width: 0%; transition: width .6s ease;
+    animation: proc-shimmer 1.8s ease-in-out infinite;
+  }
+  @keyframes proc-shimmer {
+    0%,100% { filter: brightness(1); }
+    50% { filter: brightness(1.2); }
+  }
+  .proc-pct { font-size: 11px; font-weight: 700; color: var(--accent); flex-shrink: 0; min-width: 32px; text-align: right; }
+  .proc-done { display: none; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #22C55E; }
+  .proc-done-icon { font-size: 14px; }
+
   .style2-header {
     display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 28px;
   }
@@ -816,6 +843,17 @@
   <!-- ══ SCREEN 2: STYLE ══ -->
   <div id="screen-style" class="screen">
 
+    <!-- Processing banner -->
+    <div class="proc-banner" id="proc-banner">
+      <div class="proc-icon" id="proc-icon">⚙️</div>
+      <div class="proc-text">
+        <div class="proc-label" id="proc-label">Transcribing video <span id="proc-stage">· Analysing audio…</span></div>
+        <div class="proc-bar-wrap"><div class="proc-bar-fill" id="proc-fill"></div></div>
+      </div>
+      <div class="proc-pct" id="proc-pct">0%</div>
+      <div class="proc-done" id="proc-done"><span class="proc-done-icon">✅</span> Ready — pick a style below</div>
+    </div>
+
     <div class="style2-header">
       <div>
         <div class="page-headline">Pick your style.</div>
@@ -1354,6 +1392,53 @@ function goTo(n) {
   document.getElementById(PILLS[n]).classList.add('active');
   document.getElementById(PILLS[n]).classList.remove('done');
   document.getElementById('topbar-title').textContent = TITLES[n];
+  if (n === 2) startProcAnimation();
+}
+
+// ── Processing banner animation ──
+let procTimer = null;
+const procStages = [
+  { pct: 12, label: 'Downloading video',   stage: '· Fetching from YouTube…' },
+  { pct: 30, label: 'Transcribing video',  stage: '· Analysing audio…' },
+  { pct: 55, label: 'Transcribing video',  stage: '· Identifying speech…' },
+  { pct: 72, label: 'Finding clips',       stage: '· Scoring key moments…' },
+  { pct: 88, label: 'Finding clips',       stage: '· Ranking highlights…' },
+  { pct: 100, label: 'Done',               stage: '' },
+];
+function startProcAnimation() {
+  // reset
+  clearTimeout(procTimer);
+  const fill = document.getElementById('proc-fill');
+  const pct  = document.getElementById('proc-pct');
+  const label = document.getElementById('proc-label');
+  const stage = document.getElementById('proc-stage');
+  const icon  = document.getElementById('proc-icon');
+  const done  = document.getElementById('proc-done');
+  fill.style.width = '0%'; pct.textContent = '0%';
+  label.childNodes[0].textContent = 'Downloading video';
+  stage.textContent = '· Fetching from YouTube…';
+  icon.style.display = ''; done.style.display = 'none'; pct.style.display = '';
+  let i = 0;
+  function step() {
+    if (i >= procStages.length) return;
+    const s = procStages[i++];
+    fill.style.width = s.pct + '%';
+    pct.textContent = s.pct + '%';
+    label.childNodes[0].textContent = s.label;
+    stage.textContent = s.stage;
+    if (s.pct === 100) {
+      setTimeout(() => {
+        icon.style.display = 'none'; pct.style.display = 'none';
+        done.style.display = 'flex';
+        label.childNodes[0].textContent = '';
+        stage.textContent = '';
+        fill.style.width = '100%';
+      }, 400);
+      return;
+    }
+    procTimer = setTimeout(step, 900 + Math.random() * 600);
+  }
+  procTimer = setTimeout(step, 300);
 }
 
 // ── Clip length dropdown ──
