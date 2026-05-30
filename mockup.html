@@ -663,7 +663,16 @@
       </div>
     </div>
 
-    <!-- BRIEF THE AI — moved above templates -->
+    <!-- Caption templates -->
+    <div class="sec-label">Caption Templates</div>
+    <div class="tmpl-tabs">
+      <button class="tmpl-tab active">Trending</button>
+      <button class="tmpl-tab" onclick="swTab(this)">My templates</button>
+      <button class="tmpl-tab" onclick="swTab(this)">Brand kit ✦</button>
+    </div>
+    <div class="style-grid" id="style-grid"></div>
+
+    <!-- Brief the AI -->
     <div class="sec-label">Brief the AI <span style="font-size:11px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0;">(optional)</span></div>
     <div class="brief-box" style="margin-bottom:28px;">
       <div class="brief-tags">
@@ -674,36 +683,6 @@
         <span class="brief-tag" onclick="this.classList.toggle('on')">Debate</span>
       </div>
       <textarea class="brief-textarea" placeholder="Tell AI exact moments or topics to prioritize from the transcript…" maxlength="8000"></textarea>
-    </div>
-
-    <!-- Caption templates -->
-    <div class="sec-label">Caption Templates</div>
-    <div class="tmpl-tabs">
-      <button class="tmpl-tab active">Trending</button>
-      <button class="tmpl-tab" onclick="swTab(this)">My templates</button>
-      <button class="tmpl-tab" onclick="swTab(this)">Brand kit ✦</button>
-    </div>
-    <div class="style-grid" id="style-grid"></div>
-
-    <!-- Enhancements -->
-    <div class="sec-label">Enhancements</div>
-    <div class="enhance-grid">
-      <div class="enh-card on" onclick="this.classList.toggle('on')">
-        <div class="enh-top"><span class="enh-icon">😄</span><div class="enh-toggle"></div></div>
-        <div class="enh-title">Add emoji</div><div class="enh-sub">Auto-place reactions</div>
-      </div>
-      <div class="enh-card on" onclick="this.classList.toggle('on')">
-        <div class="enh-top"><span class="enh-icon">🔥</span><div class="enh-toggle"></div></div>
-        <div class="enh-title">Highlight keywords</div><div class="enh-sub">Emphasize key words</div>
-      </div>
-      <div class="enh-card" onclick="this.classList.toggle('on')">
-        <div class="enh-top"><span class="enh-icon">✂️</span><div class="enh-toggle"></div></div>
-        <div class="enh-title">Remove silences</div><div class="enh-sub">Trim dead air</div>
-      </div>
-      <div class="enh-card" onclick="this.classList.toggle('on')">
-        <div class="enh-top"><span class="enh-icon">🎬</span><div class="enh-toggle"></div></div>
-        <div class="enh-title">Add B-roll ✦</div><div class="enh-sub">Auto insert footage</div>
-      </div>
     </div>
 
     <div class="cta-row">
